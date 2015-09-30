@@ -131,7 +131,7 @@ if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     axis([3 4 19 31])
     grid on
     xlabel('Time [s]')
-    ylabel('Gas Pedal position [%]')
+    ylabel('Throttle position [%]')
     legend('Measured','Reference')    
 end
 % tau_th is determined to be 0.032 s with the given data (time to reach the
@@ -155,7 +155,7 @@ if doPlot
     plot(GasPedalValidation_Alpha.time,GasPedalValidation_Alpha.signals.values,'k')
     axis([3 4 19 31])
     xlabel('Time [s]')
-    ylabel('Gas Pedal position [%]')
+    ylabel('Throttle position [%]')
     legend('Reference','Measured','Model')    
 end
 
@@ -203,8 +203,11 @@ if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     index = [1:numel(rel_error)];
     
     figure(2); clf; hold on
-    plot(index, rel_error, 'r*')
+    %plot(index, rel_error, 'r*')
+    plot(alpha(est_points), rel_error, 'r*')
     title('relative error')
+    xlabel('Throttle angle [%]')
+    ylabel('Relative error [%]')
     
 end
 
@@ -273,7 +276,7 @@ end
 
 m_fi=m_dot_at*n_r./(N*n_cyl);
 
-A=[t_inj -ones(length(t_inj),1)];
+A=[t_inj -ones(numel(t_inj),1)];
 
 X  = A\m_fi;
 c_fi=X(1);
@@ -353,26 +356,26 @@ end
 m_dot_fc = m_dot_at./(AFs*lambda_bc_cont);
 m_dot_exh = m_dot_at+m_dot_fc;
 
-b = T_es;
-A = [ones(length,1) m_dot_exh];
+b = T_em;
+A = [ones(length,1) sqrt(m_dot_exh)]; % Ändrat till roten ur
 
 x = A\b;
 
 T_0 = x(1);
 k = x(2);
 
-T_hat_es = A*x; 
+T_hat_em = A*x; 
 
 if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     figure(1); clf; hold on
-    plot(m_dot_exh,T_es,'ro')
-    plot(m_dot_exh,T_hat_es,'k-')
+    plot(m_dot_exh,T_em,'ro')
+    plot(m_dot_exh,T_hat_em,'k*')
     grid on
     xlabel('Exhaust mass flow [kg/s]')
     ylabel('Temperature in exhaust manifold [K]')
     legend('Measured','Reference')
     
-    rel_error=100*abs(T_es-T_hat_es)/mean(T_es);
+    rel_error=100*abs(T_em-T_hat_em)/mean(T_em);
     index = [1:numel(rel_error)];
     
     figure(2); clf; hold on
