@@ -414,7 +414,6 @@ if doPlot
     hold on;
     plot(FuelStep.t, FuelStep.lambda,'r')
     plot(lambda_validation.time, lambda_validation.signals.values,'k')
-    %axis([3 4 19 31])
     xlabel('Time [s]')
     ylabel('lambda')
     legend('Reference','Measured','Model')    
