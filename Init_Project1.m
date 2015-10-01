@@ -176,7 +176,12 @@ end
 PI_lim = max(PI(est_points), (2/(gamma_air+1))^(gamma_air/(gamma_air-1)));
 Psi = sqrt(2*gamma_air/(gamma_air-1)*(PI_lim.^(2/gamma_air)-PI_lim.^((gamma_air+1)/gamma_air)));
 
-b=m_dot_at(est_points).*sqrt(R_air*T_bef_thr(est_points))./(p_bef_thr(est_points).*Psi);
+%%%T_bef_thr%%%
+T_hat_bef_thr = ones(length,1)\T_bef_thr;
+%%%%%%%%%%%%%%%
+
+%b=m_dot_at(est_points).*sqrt(R_air*T_bef_thr(est_points))./(p_bef_thr(est_points).*Psi);
+b=m_dot_at(est_points).*sqrt(R_air*T_hat_bef_thr)./(p_bef_thr(est_points).*Psi);
 A=[ones(numel(est_points),1), alpha(est_points), alpha(est_points).^2];
 x = A\b;
 a_0=x(1);
@@ -185,7 +190,8 @@ a_2=x(3);
  
 A_eff = a_0 + a_1*alpha(est_points) + a_2*alpha(est_points).^2;
  
-m_hat_dot_at = p_bef_thr(est_points).*A_eff.*Psi./sqrt(R_air*T_bef_thr(est_points));
+%m_hat_dot_at = p_bef_thr(est_points).*A_eff.*Psi./sqrt(R_air*T_bef_thr(est_points));
+m_hat_dot_at = p_bef_thr(est_points).*A_eff.*Psi./sqrt(R_air*T_hat_bef_thr);
 
 
 if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
@@ -210,6 +216,14 @@ if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     ylabel('Relative error [%]')
     
 end
+
+% print the value
+disp(' ')
+disp('Throttle:')
+disp(['a_0 = ' num2str(a_0) ' [m^2]'])
+disp(['a_1 = ' num2str(a_1) ' [m^2]'])
+disp(['a_2 = ' num2str(a_2) ' [m^2]'])
+disp(['T_bef_thr = ' num2str(T_hat_bef_thr) ' [K]'])
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Computations for the intake manifold  %%
@@ -256,6 +270,12 @@ if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     zlabel('\eta_{vol}: relative error [%]');
     
 end
+disp(' ')
+disp('Intake manifold:')
+disp(['n_0 = ' num2str(n_0) ' [1]'])
+disp(['n_1 = ' num2str(n_1) ' [1]'])
+disp(['n_2 = ' num2str(n_2) ' [1]'])
+disp(['T_im = ' num2str(T_hat_im) ' [K]'])
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Validation intake manifold          %%
@@ -310,7 +330,10 @@ if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     xlabel('Fuel injection time [s]')
     ylabel('Relative error [%]')
 end
-
+disp(' ')
+disp('Fuel injector:')
+disp(['c_fi = ' num2str(c_fi) ' [kg/s]'])
+disp(['t_0 = ' num2str(t_0) ' [s]'])
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -361,7 +384,10 @@ if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     %axis([5 40 0 305])
     axis([40 inf 0 25])
 end
-
+disp(' ')
+disp('Cylinder:')
+disp(['n_ig_ch = ' num2str(n_ig_ch) ' [1]']) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+disp(['c_fr_0 = ' num2str(c_fr_0) ' [N/m^2]'])
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -457,7 +483,10 @@ if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     ylabel('Ambient mass flow: relative error [%]')
     xlabel('Ambient mass flow [kg/s]')
 end
-
+disp(' ')
+disp('Exhaust system:')
+disp(['C_2 = ' num2str(C_2) ' [1/m^4]'])
+disp(['t_0 = ' num2str(t_0) ' [s]'])
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%          Computations of lambda         %%
@@ -481,7 +510,10 @@ if doPlot
     ylabel('lambda')
     legend('Reference','Measured','Model')    
 end
-
+disp(' ')
+disp('Lambda sensor:')
+disp(['tau_d_bc = ' num2str(tau_d_bc) ' [s]'])
+disp(['tau_lambda = ' num2str(tau_lambda) ' [s]'])
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%% <<<< Until here is for project 1b / Next lines need to be
 %%%%%%%%%%%%% <<<< uncommented for project 1c
