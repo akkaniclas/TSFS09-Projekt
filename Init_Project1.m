@@ -189,7 +189,7 @@ m_hat_dot_at = p_bef_thr(est_points).*A_eff.*Psi./sqrt(R_air*T_bef_thr(est_point
 
 
 if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
-    figure(1); clf; hold on
+    figure(3); clf; hold on
     plot(alpha(est_points),m_dot_at(est_points),'ro')
     [ds,do] = sort(alpha(est_points));
     plot(ds,m_hat_dot_at(do),'k-')
@@ -202,10 +202,10 @@ if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     rel_error=100*abs(m_dot_at(est_points)-m_hat_dot_at)/mean(m_dot_at(est_points));
     index = [1:numel(rel_error)];
     
-    figure(2); clf; hold on
+    figure(4); clf; hold on
     %plot(index, rel_error, 'r*')
     plot(alpha(est_points), rel_error, 'r*')
-    title('relative error')
+    title('Mass air flow: relative error')
     xlabel('Throttle angle [%]')
     ylabel('Relative error [%]')
     
@@ -220,14 +220,15 @@ A= ones(length,1);
 x=A\b;
 T_hat_im = x(1);
 
-if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
+if 0  %Here doPlot is used, avoids the plot if it is set to 0
 
     rel_error=100*abs(T_im-T_hat_im)/mean(T_im);
     index = [1:numel(rel_error)];
     
-    figure(2); clf; hold on
-    plot(index, rel_error, 'r*')
-    title('relative error')
+    figure(5); clf; hold on
+    plot(T_im, rel_error, 'r*')
+    title('Temperature, intake manifold: relative error')
+    xlabel('Temperature')
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -250,7 +251,7 @@ if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     %nvol_plot(p_im, N, n_vol, 3);
     %nvol_plot(p_im, N, n_hat_vol, 4);
     %%%%%%%% Relative error:%%%%%%%%%%%%%%%
-    nvol_plot(p_im, N, 100*abs((n_vol-n_hat_vol)./n_vol), 5);
+    nvol_plot(p_im, N, 100*abs((n_vol-n_hat_vol)./n_vol), 6);
     title('Volumetric efficiency - relative error')
     zlabel('\eta_{vol}: relative error [%]');
     
@@ -263,7 +264,7 @@ end
 sim('MeasModelCompare_intake.slx')            % Run the simulink model
 
 if doPlot
-    figure(1)
+    figure(7)
     %plot(AirStep.t,AirStep.alpha_ref,'b')
     hold on;
     plot(AirStep.t,AirStep.p_im,'r')
@@ -293,7 +294,7 @@ rel_error=100*abs(m_fi-m_hat_fi)./m_fi;
 index = [1:numel(rel_error)];
 
 if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
-    figure(1); clf; hold on
+    figure(8); clf; hold on
     plot(t_inj,m_fi,'ro')
     plot(t_inj,m_hat_fi,'k-')
     legend('m_fi','m_hat_fi','location','NorthWest')
@@ -303,9 +304,9 @@ if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     legend('Measured','Reference')
     
     
-    figure(2); clf; hold on
+    figure(9); clf; hold on
     plot(t_inj, rel_error, 'r*')
-    title('relative error')
+    title('Fuel injection time: relative error')
     xlabel('Fuel injection time [s]')
     ylabel('Relative error [%]')
 end
@@ -333,7 +334,7 @@ c_fr_0 = x(2);
 M_hat_b = (A*x - W_ip)./(n_r*2*pi);
 
 if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
-    figure(1); clf; hold on
+    figure(10); clf; hold on
     plot(M_b,M_hat_b,'ro')
     plot(M_b,M_b,'k-')
     grid on
@@ -344,13 +345,21 @@ if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     rel_error=100*abs(M_b-M_hat_b)./M_b;
     %index = [1:numel(rel_error)];
     
-    figure(2); clf; hold on
+    figure(11); clf; hold on
     plot(M_b, rel_error, 'r*')
-    title('Relative error')
+    title('Torque, low load: relative error')
     xlabel('Torque [Nm]')
     ylabel('Relative error [%]')
     axis([5 40 0 305])
     %axis([40 inf 0 25])
+    
+    figure(12); clf; hold on
+    plot(M_b, rel_error, 'r*')
+    title('Torque, high load: relative error')
+    xlabel('Torque [Nm]')
+    ylabel('Relative error [%]')
+    %axis([5 40 0 305])
+    axis([40 inf 0 25])
 end
 
 
@@ -363,7 +372,7 @@ end
 %%            Light-off time               %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 load ('lightOff.mat');
-figure
+figure(13)
 plot(lightOff.time,lightOff.lambda_bc_disc)
 hold on
 plot(lightOff.time,lightOff.lambda_ac_disc)
@@ -388,7 +397,7 @@ k = x(2);
 T_hat_em = A*x; 
 
 if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
-    figure(1); clf; hold on
+    figure(14); clf; hold on
     plot(m_dot_exh,T_em,'ro')
     [ds,do] = sort(m_dot_exh);
     plot(ds,T_hat_em(do),'k-')
@@ -399,9 +408,9 @@ if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     
     rel_error=100*abs(T_em-T_hat_em)/mean(T_em);
     
-    figure(2); clf; hold on
+    figure(15); clf; hold on
     plot(m_dot_exh, rel_error, 'r*')
-    title('relative error')
+    title('Exhaust mass flow: relative error')
     xlabel('Exhaust mass flow [kg/s]')
     ylabel('Relative error [%]')
 end
@@ -432,7 +441,7 @@ C_2=x(1);
 m_hat_dot_amb = sqrt(b/x); 
 
 if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
-    figure(1); clf; hold on
+    figure(16); clf; hold on
     plot(m_dot_amb(est_points),m_hat_dot_amb,'ro')
     plot(m_dot_amb(est_points), m_dot_amb(est_points),'k-')
     grid on
@@ -442,10 +451,10 @@ if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     
     rel_error=100*abs(m_hat_dot_amb-m_dot_amb(est_points))./m_dot_amb(est_points);
     
-    figure(2); clf; hold on
+    figure(17); clf; hold on
     plot(m_dot_amb(est_points), rel_error, 'r*')
     title('relative error')
-    ylabel('Relative error [%]')
+    ylabel('Ambient mass flow: relative error [%]')
     xlabel('Ambient mass flow [kg/s]')
 end
 
@@ -463,7 +472,7 @@ tau_d_bc = 0.05;
 sim('MeasModelCompare_lambda.mdl')            % Run the simulink model
 
 if doPlot
-    figure(2)
+    figure(18)
     plot(FuelStep.t, fake_lambda_cyl,'b')
     hold on;
     plot(FuelStep.t, FuelStep.lambda,'r')
