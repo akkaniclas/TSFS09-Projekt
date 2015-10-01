@@ -39,10 +39,10 @@ function nvol_plot(inpr,rps,nvol,fignmbr);
   end
   figure(fignmbr); clf;
   mesh(pManVecti,60*NVecti,Z);
-  xlabel('Insugningstryck [kPa]');
-  ylabel('Varvtal [rpm]');
+  xlabel('Pressure, intake manifold [kPa]');
+  ylabel('Engine speed [rpm]');
   zlabel('\eta_{vol}');
-  title('Fyllnadsgrad');
+  title('Volumetric efficiency');
   %view(-60,25);
   
 

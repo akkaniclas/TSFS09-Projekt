@@ -247,9 +247,13 @@ n_2 = x(3);
 n_hat_vol = n_0 + sqrt(p_im)*n_1 + n_2*N;
 
 if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
-    nvol_plot(p_im, N, n_vol, 3);
-    nvol_plot(p_im, N, n_hat_vol, 4);
-    nvol_plot(p_im, N, (n_vol-n_hat_vol)/mean(n_vol), 5);
+    %nvol_plot(p_im, N, n_vol, 3);
+    %nvol_plot(p_im, N, n_hat_vol, 4);
+    %%%%%%%% Relative error:%%%%%%%%%%%%%%%
+    nvol_plot(p_im, N, 100*abs((n_vol-n_hat_vol)./n_vol), 5);
+    title('Volumetric efficiency - relative error')
+    zlabel('\eta_{vol}: relative error [%]');
+    
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -315,7 +319,7 @@ end
 W_ip = V_D*(p_em-p_im);
 m_dot_fc = m_dot_at./(AFs*lambda_bc_cont);
 
-a_1 = m_dot_fc*n_r*q_LHV./(N*n_cyl)*(1-1/r_c^(gamma_air-1)).*min(1,lambda_bc_cont);
+a_1 = m_dot_fc*n_r*q_LHV./N*(1-1/r_c^(gamma_air-1)).*min(1,lambda_bc_cont);
 a_2 = V_D*ones(length,1);
  
 A = [a_1 -a_2];
@@ -333,16 +337,20 @@ if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     plot(M_b,M_hat_b,'ro')
     plot(M_b,M_b,'k-')
     grid on
-    xlabel('')
-    ylabel('')
-    legend('Measured','Reference')
+    xlabel('Torque [Nm]')
+    ylabel('Torque [Nm]')
+    legend('Measured vs model','Measured vs measured')
     
-    rel_error=100*abs(M_b-M_hat_b)/mean(M_b);
-    index = [1:numel(rel_error)];
+    rel_error=100*abs(M_b-M_hat_b)./M_b;
+    %index = [1:numel(rel_error)];
     
     figure(2); clf; hold on
-    plot(index, rel_error, 'r*')
-    title('relative error')
+    plot(M_b, rel_error, 'r*')
+    title('Relative error')
+    xlabel('Torque [Nm]')
+    ylabel('Relative error [%]')
+    axis([5 40 0 305])
+    %axis([40 inf 0 25])
 end
 
 
@@ -352,6 +360,17 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%            Light-off time               %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+load ('lightOff.mat');
+figure
+plot(lightOff.time,lightOff.lambda_bc_disc)
+hold on
+plot(lightOff.time,lightOff.lambda_ac_disc)
+xlabel('Time [s]')
+ylabel('Lambda')
+title('Light-off time')
+
 %%   Computations of exhaust Temperature    %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -404,6 +423,7 @@ end
 
 A=m_dot_amb(est_points).^2;
 b=(p_es(est_points)-p_amb)./(R_exh*T_em(est_points)./p_es(est_points));
+
 
 x=A\b;
 
