@@ -285,7 +285,7 @@ t_0 = X(2)/c_fi;
 
 m_hat_fi=c_fi*(t_inj-t_0);
 
-rel_error=100*abs(m_fi-m_hat_fi)/mean(m_fi);
+rel_error=100*abs(m_fi-m_hat_fi)./m_fi;
 index = [1:numel(rel_error)];
 
 if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
@@ -300,8 +300,10 @@ if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     
     
     figure(2); clf; hold on
-    plot(index, rel_error, 'r*')
+    plot(t_inj, rel_error, 'r*')
     title('relative error')
+    xlabel('Fuel injection time [s]')
+    ylabel('Relative error [%]')
 end
 
 
@@ -369,18 +371,20 @@ T_hat_em = A*x;
 if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     figure(1); clf; hold on
     plot(m_dot_exh,T_em,'ro')
-    plot(m_dot_exh,T_hat_em,'k*')
+    [ds,do] = sort(m_dot_exh);
+    plot(ds,T_hat_em(do),'k-')
     grid on
     xlabel('Exhaust mass flow [kg/s]')
     ylabel('Temperature in exhaust manifold [K]')
     legend('Measured','Reference')
     
     rel_error=100*abs(T_em-T_hat_em)/mean(T_em);
-    index = [1:numel(rel_error)];
     
     figure(2); clf; hold on
-    plot(index, rel_error, 'r*')
+    plot(m_dot_exh, rel_error, 'r*')
     title('relative error')
+    xlabel('Exhaust mass flow [kg/s]')
+    ylabel('Relative error [%]')
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -391,12 +395,39 @@ m_dot_fc = m_dot_at./(AFs*lambda_bc_cont);
 m_dot_exh = m_dot_at+m_dot_fc;
 m_dot_amb=m_dot_exh;
 
-A=m_dot_amb.^2;
-b=(p_es-p_amb)./(R_exh*T_es./p_es);
+est_points = [];
+for i=1:length
+    if (p_es(i)-p_amb)>0
+        est_points = [est_points; i];
+    end
+end
+
+A=m_dot_amb(est_points).^2;
+b=(p_es(est_points)-p_amb)./(R_exh*T_em(est_points)./p_es(est_points));
 
 x=A\b;
 
 C_2=x(1);
+
+m_hat_dot_amb = sqrt(b/x); 
+
+if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
+    figure(1); clf; hold on
+    plot(m_dot_amb(est_points),m_hat_dot_amb,'ro')
+    plot(m_dot_amb(est_points), m_dot_amb(est_points),'k-')
+    grid on
+    ylabel('Ambient mass flow [kg/s]')
+    xlabel('Ambient mass flow [kg/s]')
+    legend('Measured vs model','Measured vs measured')
+    
+    rel_error=100*abs(m_hat_dot_amb-m_dot_amb(est_points))./m_dot_amb(est_points);
+    
+    figure(2); clf; hold on
+    plot(m_dot_amb(est_points), rel_error, 'r*')
+    title('relative error')
+    ylabel('Relative error [%]')
+    xlabel('Ambient mass flow [kg/s]')
+end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
