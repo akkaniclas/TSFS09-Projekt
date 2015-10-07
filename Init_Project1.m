@@ -7,7 +7,7 @@
 %  Decide here if the script generates the validation plots or not by
 %  changing the binary varable doPlot
 clear all
-doPlot = 1;                                     % [-] doPlot==1 generate validation plots, doPlot==0 the contrary.
+doPlot = 0;                                     % [-] doPlot==1 generate validation plots, doPlot==0 the contrary.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%  Load the engine data from Project 1a %%
