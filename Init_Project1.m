@@ -9,6 +9,7 @@
 clear all
 doPlot = 0;                                     % [-] doPlot==1 generate validation plots, doPlot==0 the contrary.
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%  Load the engine data from Project 1a %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -17,6 +18,11 @@ load('EngineMapTSFS09.mat');
 load('AirStep.mat'); % Load here your dynamic measurements
 load('FuelStep.mat'); %Load here your dynamic measurements
 length=306;
+
+%%
+%Extra def
+T_t=300;
+rTurb=0.05;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%      Extract Data From Engine Map     %%%
@@ -91,7 +97,7 @@ V_ic            = 10e-3;                        % [m^3]         Volume of the in
 c_tc_fric       = 1e-6;                         % [N*m/(rad/s)] Turbo shaft friction constant
 Cd_wg           = 0.8;                          % [-]           Assumed value for WG discharge constant
 A_max_wg        = 0.035^2/4*pi;                 % [m^2]         Measured approximation of maximum opening area of WG valve
-dp_thrREF       = 10e3;                         % [kPa]         Default desired pressure loss over the throttle
+dp_thrREF       = 10e3;      eta                   % [kPa]         Default desired pressure loss over the throttle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%      Set up the driver model   %%
@@ -205,7 +211,7 @@ if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     legend('Measured','Model')
     title('When \Pi < 0.73')
     
-    rel_error=100*abs(m_dot_at(est_points)-m_hat_dot_at)/mean(m_dot_at(est_points));
+    rel_error=100*abs(m_dot_at(est_points)-m_hat_dot_at)./m_dot_at(est_points);
     index = [1:numel(rel_error)];
     
     figure(4); clf; hold on
@@ -236,7 +242,7 @@ T_hat_im = x(1);
 
 if 0  %Here doPlot is used, avoids the plot if it is set to 0
 
-    rel_error=100*abs(T_im-T_hat_im)/mean(T_im);
+    rel_error=100*abs(T_im-T_hat_im)./T_im;
     index = [1:numel(rel_error)];
     
     figure(5); clf; hold on
@@ -299,7 +305,8 @@ end
 %% Computations for the injection time %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-m_fi=m_dot_at*n_r./(N*n_cyl);
+%m_fi=m_dot_at*n_r./(N*n_cyl);
+m_fi=m_dot_at*n_r./(N*n_cyl.*lambda_bc_cont*AFs);
 
 A=[t_inj -ones(numel(t_inj),1)];
 
@@ -313,7 +320,7 @@ m_hat_fi=c_fi*(t_inj-t_0);
 rel_error=100*abs(m_fi-m_hat_fi)./m_fi;
 index = [1:numel(rel_error)];
 
-if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
+if 1 %Here doPlot is used, avoids the plot if it is set to 0
     figure(8); clf; hold on
     plot(t_inj,m_fi,'ro')
     plot(t_inj,m_hat_fi,'k-')
@@ -343,10 +350,10 @@ disp(['t_0 = ' num2str(t_0) ' [s]'])
 W_ip = V_D*(p_em-p_im);
 m_dot_fc = m_dot_at./(AFs*lambda_bc_cont);
 
-a_1 = m_dot_fc*n_r*q_LHV./N*(1-1/r_c^(gamma_air-1)).*min(1,lambda_bc_cont);
-a_2 = V_D*ones(length,1);
+a1 = m_dot_fc*n_r*q_LHV./N*(1-1/r_c^(gamma_air-1)).*min(1,lambda_bc_cont);
+a2 = V_D*ones(length,1);
  
-A = [a_1 -a_2];
+A = [a1 -a2];
 b = n_r*2*pi*M_b+W_ip;
 
 x = A\b;
@@ -397,14 +404,16 @@ disp(['c_fr_0 = ' num2str(c_fr_0) ' [N/m^2]'])
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%            Light-off time               %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-load ('lightOff.mat');
-figure(13)
-plot(lightOff.time,lightOff.lambda_bc_disc)
-hold on
-plot(lightOff.time,lightOff.lambda_ac_disc)
-xlabel('Time [s]')
-ylabel('Lambda')
-title('Light-off time')
+if doPlot
+    load ('lightOff.mat');
+    figure(13)
+    plot(lightOff.time,lightOff.lambda_bc_disc)
+    hold on
+    plot(lightOff.time,lightOff.lambda_ac_disc)
+    xlabel('Time [s]')
+    ylabel('Lambda')
+    title('Light-off time')
+end
 
 %%   Computations of exhaust Temperature    %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -432,7 +441,7 @@ if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     ylabel('Temperature in exhaust manifold [K]')
     legend('Measured','Reference')
     
-    rel_error=100*abs(T_em-T_hat_em)/mean(T_em);
+    rel_error=100*abs(T_em-T_hat_em)./T_em;
     
     figure(15); clf; hold on
     plot(m_dot_exh, rel_error, 'r*')
@@ -523,73 +532,73 @@ disp(['tau_lambda = ' num2str(tau_lambda) ' [s]'])
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Initialize I/O abstraction layer %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% % For more information about the I / O block look under Project1c/ECU / "I / O abstraction layer"
-% % This can be used to do special tests with manually selected parameters:
-% % Engine speed, throttle reference, wastegate (project2) and pedal position.
-% % When all {property}_manual = 0, this block is disconnected by default.
-% N_e_manual = 0; N_e_step = 1; NINI = 2000; NEND = NINI;  NeST=30; NeSlope = 1; NeStartTime = 60; NeRampInit = 800;
-% alpha_REF_manual = 0; alphaINI = 0.0; alphaEND = alphaINI; alphaST=30;
-% wg_REF_manual = 0; wgINI = 100; wgEND = wgINI; wgST=30;
-% pedPos_manual = 0; pedINI = 0.2; pedEND = 1.0; pedST=30;
+% For more information about the I / O block look under Project1c/ECU / "I / O abstraction layer"
+% This can be used to do special tests with manually selected parameters:
+% Engine speed, throttle reference, wastegate (project2) and pedal position.
+% When all {property}_manual = 0, this block is disconnected by default.
+N_e_manual = 0; N_e_step = 1; NINI = 2000; NEND = NINI;  NeST=30; NeSlope = 1; NeStartTime = 60; NeRampInit = 800;
+alpha_REF_manual = 0; alphaINI = 0.0; alphaEND = alphaINI; alphaST=30;
+wg_REF_manual = 0; wgINI = 100; wgEND = wgINI; wgST=30;
+pedPos_manual = 0; pedINI = 0.2; pedEND = 1.0; pedST=30;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%  Calculate rolling and air resistance %% 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% F = [0 410 1050]';                  % [N] Force vector
-% v = [0 80 160]';                    % [km/h] Speed vector
-% rho_air=p_amb/(R_air*T_amb);        % [kg/m^3] Air density
-% A=[VehicleMass*ones(size(v)) VehicleMass*v/3.6 0.5*VehicleArea*rho_air*(v/3.6).^2];
-% x=A\F;
-% % Rolling resistance coeficcients
-% c_r1=x(1);
-% c_r2=x(2);
-% %Air drag coeficcient
-% C_d=x(3);
+F = [0 410 1050]';                  % [N] Force vector
+v = [0 80 160]';                    % [km/h] Speed vector
+rho_air=p_amb/(R_air*T_amb);        % [kg/m^3] Air density
+A=[VehicleMass*ones(size(v)) VehicleMass*v/3.6 0.5*VehicleArea*rho_air*(v/3.6).^2];
+x=A\F;
+% Rolling resistance coeficcients
+c_r1=x(1);
+c_r2=x(2);
+%Air drag coeficcient
+C_d=x(3);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %%  Load cycle Data     %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-% init_drivecycle;
+init_drivecycle;
+
+% Loaded data for the European driving cycle:
+% Driving Scenario: Matrix from which the following information is extracted
+% S: Reference Speed [km/h]
+% U: Clutch position [-]
+% G: Selected gear [0-5]
+% T: Time Vector [s]
+
+% Forming vectors for the driver model
+Clutch = [T U];
+Gear   = [T max(G,1)];
+Speed  = [T S];
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % ---------------------------------------------- %
+% % Aftertreatment when the simulation is complete %
+% % ---------------------------------------------- %
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% % Loaded data for the European driving cycle:
-% % Driving Scenario: Matrix from which the following information is extracted
-% % S: Reference Speed [km/h]
-% % U: Clutch position [-]
-% % G: Selected gear [0-5]
-% % T: Time Vector [s]
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%     Light-Off computation      %%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% % Forming vectors for the driver model
-% Clutch = [T U];
-% Gear   = [T max(G,1)];
-% Speed  = [T S];
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% ---------------------------------------------- %
-% Aftertreatment when the simulation is complete %
-% ---------------------------------------------- %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%     Light-Off computation    %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% lightOff =
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%      Compute emissions       %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Inputs to calcEmissions
-%% tout: Time Vector from Simulink
-%% lambda: Continuous lambda
-%% Distance: Distance traveled in meters
-%% dmacAct: Mass air flow to the cylinder in kg / s
-%% dmfAct: Fuel flow to the cylinder in kg / s
-%% lightoff: Time in seconds until the light-Off
-
+% lightOff = 37;
+% 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%      Compute emissions        %%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % Inputs to calcEmissions
+% % tout: Time Vector from Simulink
+% % lambda: Continuous lambda
+% % Distance: Distance traveled in meters
+% % dmacAct: Mass air flow to the cylinder in kg / s
+% % dmfAct: Fuel flow to the cylinder in kg / s
+% % lightoff: Time in seconds until the light-Off
+% 
 % calcEmissions(tout, lambda, Distance, dmacAct, dmfcAct, lightOff);
-
+% 
 % Calculate fuel consumption
 % fuelCons = 
-  
+%   
 % disp(sprintf('Fuel Consumption: %1.2f [l/(10 mil)]',fuelCons))
