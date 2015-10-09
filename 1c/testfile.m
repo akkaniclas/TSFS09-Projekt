@@ -40,3 +40,29 @@ t_inj_test = t_inj(k);
 m_dot_fc_test = N(k)*n_cyl*m_fi(k)/n_r;
 
 sim('fuel_injector.slx')
+
+
+%%
+
+k=100;
+
+N_test = N(k);
+m_dot_fc_test = m_dot_fc(k);
+p_em_test=p_em(k);
+p_im_test=p_im(k);
+m_dot_ac_test=m_dot_at(k);
+M_e_test=M_b(k);
+
+sim('cylinder.slx')
+
+%%
+k=1;
+
+T_em_test = T_em(k)
+m_dot_fc_test = m_dot_fc(k)
+p_em_test=p_em(k)
+m_dot_ac_test=m_dot_at(k)
+m_dot_exh_test=m_dot_fc_test+m_dot_ac_test
+
+
+sim('exhaust_system.slx')
