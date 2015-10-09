@@ -422,7 +422,7 @@ m_dot_fc = m_dot_at./(AFs*lambda_bc_cont);
 m_dot_exh = m_dot_at+m_dot_fc;
 
 b = T_em;
-A = [ones(length,1) sqrt(m_dot_exh)]; % Ändrat till roten ur
+A = [ones(length,1) sqrt(m_dot_exh)]; % Aendrat till roten ur
 
 x = A\b;
 
