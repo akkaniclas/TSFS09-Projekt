@@ -7,7 +7,7 @@
 %  Decide here if the script generates the validation plots or not by
 %  changing the binary varable doPlot
 clear all
-doPlot = 1;                                     % [-] doPlot==1 generate validation plots, doPlot==0 the contrary.
+doPlot = 0;                                     % [-] doPlot==1 generate validation plots, doPlot==0 the contrary.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -594,6 +594,14 @@ init_drivecycle;
 Clutch = [T U];
 Gear   = [T max(G,1)];
 Speed  = [T S];
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%            Parameters for regulation           %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+K_p =0.015;
+K_I = 0.1;
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % % ---------------------------------------------- %
