@@ -7,7 +7,7 @@
 %  Decide here if the script generates the validation plots or not by
 %  changing the binary varable doPlot
 clear all
-doPlot = 0;                                     % [-] doPlot==1 generate validation plots, doPlot==0 the contrary.
+doPlot = 1;                                     % [-] doPlot==1 generate validation plots, doPlot==0 the contrary.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -97,7 +97,7 @@ V_ic            = 10e-3;                        % [m^3]         Volume of the in
 c_tc_fric       = 1e-6;                         % [N*m/(rad/s)] Turbo shaft friction constant
 Cd_wg           = 0.8;                          % [-]           Assumed value for WG discharge constant
 A_max_wg        = 0.035^2/4*pi;                 % [m^2]         Measured approximation of maximum opening area of WG valve
-dp_thrREF       = 10e3;      eta                   % [kPa]         Default desired pressure loss over the throttle
+dp_thrREF       = 10e3;                   % [kPa]         Default desired pressure loss over the throttle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%      Set up the driver model   %%
@@ -186,18 +186,19 @@ Psi = sqrt(2*gamma_air/(gamma_air-1)*(PI_lim.^(2/gamma_air)-PI_lim.^((gamma_air+
 T_hat_bef_thr = ones(length,1)\T_bef_thr;
 %%%%%%%%%%%%%%%
 
-%b=m_dot_at(est_points).*sqrt(R_air*T_bef_thr(est_points))./(p_bef_thr(est_points).*Psi);
+
 b=m_dot_at(est_points).*sqrt(R_air*T_hat_bef_thr)./(p_bef_thr(est_points).*Psi);
+A_eff=b;
 A=[ones(numel(est_points),1), alpha(est_points), alpha(est_points).^2];
 x = A\b;
 a_0=x(1);
 a_1=x(2);
 a_2=x(3);
  
-A_eff = a_0 + a_1*alpha(est_points) + a_2*alpha(est_points).^2;
+A_hat_eff = a_0 + a_1*alpha(est_points) + a_2*alpha(est_points).^2;
  
-%m_hat_dot_at = p_bef_thr(est_points).*A_eff.*Psi./sqrt(R_air*T_bef_thr(est_points));
-m_hat_dot_at = p_bef_thr(est_points).*A_eff.*Psi./sqrt(R_air*T_hat_bef_thr);
+%m_hat_dot_at = p_bef_thr(est_points).*A_hat_eff.*Psi./sqrt(R_air*T_bef_thr(est_points));
+m_hat_dot_at = p_bef_thr(est_points).*A_hat_eff.*Psi./sqrt(R_air*T_hat_bef_thr);
 
 
 if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
@@ -218,6 +219,25 @@ if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
     %plot(index, rel_error, 'r*')
     plot(alpha(est_points), rel_error, 'r*')
     title('Mass air flow: relative error')
+    xlabel('Throttle angle [%]')
+    ylabel('Relative error [%]')
+    
+    figure(31); clf; hold on
+    plot(alpha(est_points),A_eff,'ro')
+    [ds,do] = sort(alpha(est_points));
+    plot(ds,A_hat_eff(do),'k-')
+    grid on
+    xlabel('Throttle angle [rad]')
+    ylabel('Effective area [m^2]')
+    legend('Measured','Model')
+    title('When \Pi < 0.73')
+    
+    rel_error=100*abs(A_eff-A_hat_eff)./A_eff;
+    
+    figure(41); clf; hold on
+    %plot(index, rel_error, 'r*')
+    plot(alpha(est_points), rel_error, 'r*')
+    title('Effective area: relative error')
     xlabel('Throttle angle [%]')
     ylabel('Relative error [%]')
     
@@ -268,8 +288,10 @@ n_2 = x(3);
 n_hat_vol = n_0 + sqrt(p_im)*n_1 + n_2*N;
 
 if doPlot  %Here doPlot is used, avoids the plot if it is set to 0
-    %nvol_plot(p_im, N, n_vol, 3);
-    %nvol_plot(p_im, N, n_hat_vol, 4);
+    nvol_plot(p_im, N, n_vol, 3);
+    title('Volumetric efficiency - measured')
+    nvol_plot(p_im, N, n_hat_vol, 4);
+    title('Volumetric efficiency - model')
     %%%%%%%% Relative error:%%%%%%%%%%%%%%%
     nvol_plot(p_im, N, 100*abs((n_vol-n_hat_vol)./n_vol), 6);
     title('Volumetric efficiency - relative error')
@@ -320,7 +342,7 @@ m_hat_fi=c_fi*(t_inj-t_0);
 rel_error=100*abs(m_fi-m_hat_fi)./m_fi;
 index = [1:numel(rel_error)];
 
-if 1 %Here doPlot is used, avoids the plot if it is set to 0
+if doPlot %Here doPlot is used, avoids the plot if it is set to 0
     figure(8); clf; hold on
     plot(t_inj,m_fi,'ro')
     plot(t_inj,m_hat_fi,'k-')
