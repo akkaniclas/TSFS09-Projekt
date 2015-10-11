@@ -7,7 +7,7 @@
 %  Decide here if the script generates the validation plots or not by
 %  changing the binary varable doPlot
 clear all
-doPlot = 1;                                     % [-] doPlot==1 generate validation plots, doPlot==0 the contrary.
+doPlot = 0;                                     % [-] doPlot==1 generate validation plots, doPlot==0 the contrary.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -603,32 +603,32 @@ Speed  = [T S];
 K_p =0.015;
 K_I = 0.1;
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% % ---------------------------------------------- %
-% % Aftertreatment when the simulation is complete %
-% % ---------------------------------------------- %
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%     Light-Off computation      %%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
-% lightOff = 37;
-% 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%      Compute emissions        %%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% % Inputs to calcEmissions
-% % tout: Time Vector from Simulink
-% % lambda: Continuous lambda
-% % Distance: Distance traveled in meters
-% % dmacAct: Mass air flow to the cylinder in kg / s
-% % dmfAct: Fuel flow to the cylinder in kg / s
-% % lightoff: Time in seconds until the light-Off
-% 
-% calcEmissions(tout, lambda, Distance, dmacAct, dmfcAct, lightOff);
-% 
-% Calculate fuel consumption
-% fuelCons = 
-%   
-% disp(sprintf('Fuel Consumption: %1.2f [l/(10 mil)]',fuelCons))
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ---------------------------------------------- %
+% Aftertreatment when the simulation is complete %
+% ---------------------------------------------- %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Light-Off computation      %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+lightOff = 0;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%      Compute emissions        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Inputs to calcEmissions
+% tout: Time Vector from Simulink
+% lambda: Continuous lambda
+% Distance: Distance traveled in meters
+% dmacAct: Mass air flow to the cylinder in kg / s
+% dmfAct: Fuel flow to the cylinder in kg / s
+% lightoff: Time in seconds until the light-Off
+
+calcEmissions(t, lambda_cyl, Distance, dmacAct, dmfcAct, lightOff);
+
+%Calculate fuel consumption
+fuelCons = fuel(end)/0.75/Distance(end)*100000;
+  
+disp(sprintf('Fuel Consumption: %1.2f [l/(10 mil)]',fuelCons))
