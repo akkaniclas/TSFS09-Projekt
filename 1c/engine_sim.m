@@ -34,6 +34,10 @@ if doPlot
     figure(3)
     subplot(4,1,1)
     plot(t,VehicleSpeed)
+    hold on 
+    plot(T,S)
+    axis([0 30 -inf inf])
+    hold off
     
     grid on
     ylabel('Vehicle speed [km/h]')
@@ -64,6 +68,10 @@ if doPlot
     figure(3)
     subplot(4,1,1)
     plot(t,VehicleSpeed)
+    hold on 
+    plot(T,S)
+    axis([0 600 -inf inf])
+    hold off
     
     grid on
     ylabel('Vehicle speed [km/h]')
