@@ -20,17 +20,16 @@ load full_throttle.mat
 if doPlot
     figure(2)
     plot(t,VehicleSpeed)
-    axis([-inf inf 70 110])
+    axis tight
+    axis([15 40 70 110])
+    
     xlabel('Time [s]')
     ylabel('Speed [km/h]')
     title('Full throttle, 4th gear')
 end
 %%
 load drive_cycle_30
-%%
-K_p=0.002;
-K_I=0.03;
-%%
+
 if doPlot
     figure(3)
     subplot(4,1,1)
@@ -60,7 +59,7 @@ end
 
 %%
 load drive_cycle_600
-%%
+
 if doPlot
     figure(3)
     subplot(4,1,1)

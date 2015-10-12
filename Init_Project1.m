@@ -192,6 +192,7 @@ A_eff=b;
 A=[ones(numel(est_points),1), alpha(est_points), alpha(est_points).^2];
 x = A\b;
 a_0=x(1);
+a_0=1e-5; % Overwrite a_0 with better value!!
 a_1=x(2);
 a_2=x(3);
  
@@ -600,14 +601,15 @@ Speed  = [T S];
 %%            Parameters for regulation           %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-K_p =0.015;
-K_I = 0.1;
+K_p=0.002;
+K_I=0.03;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ---------------------------------------------- %
 % Aftertreatment when the simulation is complete %
 % ---------------------------------------------- %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+sim('Project_template.slx')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%     Light-Off computation      %%
