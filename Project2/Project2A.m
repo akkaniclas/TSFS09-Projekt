@@ -14,16 +14,15 @@ doExpFig=0;
 doSimulinkFig=0;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%      Sätter upp turbomotordata med antaganden     %%
+%%      Satter upp turbomotordata med antaganden     %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%  Läs in modellparametrar från Projekt1 för att få basmotorn alla parametrar
 
 %clear all; close all;
 load turboMap
-%load Enginemap
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Ladda ny mätdata och parametrar %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+load EnginemapTSFS09
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Load mesurement data and parameters %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 NcCorr = comp.NcCorr;
 m_dot_Ccorr = comp.m_dot_cCorr;
 p01    = comp.p01;
@@ -53,14 +52,15 @@ gamma_exh = 1.3;                % [J/(kg*K)]
 cp_air =  980.0000;
 gamma_air = 1.4000;
 
-%Beräknade storheter
+%Calculated quantetees
 Nc  = NcCorr*sqrt(T01/TCref);
 m_dot_c  = m_dot_Ccorr*(p01/pCref)/(sqrt(T01/TCref));
 Uc2 = rComp*2*pi*Nc/60;
 
 m_dot_t  = TFP.*p04*1e-3.*PiT./sqrt(T03); %or  TFP.*p03*1e-3./sqrt(T03);
 Nt  = TSP.*sqrt(T03);
-BSR = 2*pi*Nt*rTurb./sqrt(2*cp_exh*T03*(1-PiT.^(-(gamma_exh-1)/gamma_exh)))/60;
+BSR = 2*pi*Nt*rTurb./sqrt(2*cp_exh*T03* ...
+    (1-PiT.^(-(gamma_exh-1)/gamma_exh)))/60;
 
 % create matrices where every column represents the data from same turbo
 % speed
@@ -82,9 +82,9 @@ m_dot_t_M   = reshape(m_dot_t,6,5);
 Nt_M   = reshape(Nt,6,5);
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Compressor modell    %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % COMPRESSOR Mass flow model
 x=[PiC Uc2];
 
@@ -94,7 +94,8 @@ y=m_dot_Ccorr;
 x0 = [1 1];
 
 % Define the nonlinear function
-f_m_dot_Ccorr_mod = @(a,x)(a(1).*sqrt(1-(x(:,1)./((x(:,2).^2.*a(2)/(2*cp_air*T01)+1).^(gamma_air/(gamma_air-1)))).^2));
+f_m_dot_Ccorr_mod = @(a,x)(a(1).*sqrt(1-(x(:,1)./((x(:,2).^2.*a(2)/ ...
+    (2*cp_air*T01)+1).^(gamma_air/(gamma_air-1)))).^2));
 func = f_m_dot_Ccorr_mod;
 
 par = lsqcurvefit(func, x0, x, y);
@@ -117,7 +118,7 @@ if doPlot
     saveas(h,'Figures\compressor_mass_flow','png')
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% COMPRESSOR efficiency model
 
 %par=[PiC_at_etaCmax WcCorr_at_etaCmax etaCmax Q11 Q22 Q12];
@@ -150,9 +151,9 @@ if doPlot
     saveas(h,'Figures\compressor_efficiensy','png')
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Turbin modell    %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TURBIN Mass flow model
 
 
@@ -186,8 +187,8 @@ if doPlot
     saveas(h,'Figures\turbine_mass_flow','png')
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% TURBIN efficiency model
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% TURBIN efficiency model
 x=BSR;
 y=etaT;
 
@@ -197,37 +198,52 @@ c1ini = 50; %
 x0 = [c0ini c1ini];
 
 % Define the nonlinear function
-f_etaT_BSR = @(a,x)(a(1).*(1 - ((x-a(2))./a(2)).^2));
-func = f_etaT_BSR;
+f_etaT_mod = @(a,x)(a(1).*(1 - ((x-a(2))./a(2)).^2));
+func = f_etaT_mod;
 
 par = lsqcurvefit(func, x0, x, y);
 etaTmax = par(1);
 BSRmax = par(2)
 
-% par=[BSRmax etaTmax];
-% x=[Nt PiT]
+etaT_mod = f_etaT_mod(par,x)
 
-% ----- find unknown model parameters using nonlinear least squares method
+etaT_mod_M = reshape(etaT_mod,6,5);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if doPlot
+    close all
+    h = figure
+    plot(BSR_M, etaT_M,'b-o',BSR_M, etaT_mod_M, 'r--s')
+   % legend('Measured', 'Model', 'Location','northwest')
+    xlabel('BSR [-]')
+    ylabel('\eta_t [-]')
+    saveas(h,'Figures\turbine_efficiency','png')
+end
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% BMEP model    %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % par=[Cp0 Cp1];
 % x=[EngineMap.p_im EngineMap.M_e]
 
-% ----- find unknown model parameters using least squares method
+bmep=EngineMap.M_e*EngineMap.engine.n_r*2*pi/EngineMap.engine.V_D;
+p_im=EngineMap.p_im;
 
+A=[-ones(length(p_im),1) p_im];
 
+par=A\bmep;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% plot the validation figures for all models
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+bmep_mod=A*par
 
 if doPlot
-    %% your validation figure must be same as Figure 5.2 in the compendium.
-    %% A validation plot for BMEP model is also required
+    close all
+    h = figure
+    plot(p_im, bmep,'ro',p_im, bmep_mod, 'k-')
+   % legend('Measured', 'Model', 'Location','northwest')
+    xlabel('p_{im} [Pa]')
+    ylabel('bmep [Pa]')
+    saveas(h,'Figures\bmep','png')
 end
-
 
 
 
