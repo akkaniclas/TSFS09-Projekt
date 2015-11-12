@@ -151,7 +151,7 @@ if doPlot
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Compressor modell    %%
+%% Turbin modell    %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TURBIN Mass flow model
 
@@ -188,6 +188,21 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TURBIN efficiency model
+x=BSR;
+y=etaT;
+
+% Define reasonable start values on the parameters
+c0ini = 0.8; % 
+c1ini = 50; % 
+x0 = [c0ini c1ini];
+
+% Define the nonlinear function
+f_etaT_BSR = @(a,x)(a(1).*(1 - ((x-a(2))./a(2)).^2));
+func = f_etaT_BSR;
+
+par = lsqcurvefit(func, x0, x, y);
+etaTmax = par(1);
+BSRmax = par(2)
 
 % par=[BSRmax etaTmax];
 % x=[Nt PiT]
