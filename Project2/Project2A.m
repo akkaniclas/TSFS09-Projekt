@@ -60,7 +60,7 @@ Uc2 = rComp*2*pi*Nc;
 
 m_dot_t  = TFP.*p04*1e-3.*PiT./sqrt(T03); %or  TFP.*p03*1e-3./sqrt(T03);
 Nt  = TSP.*sqrt(T03);
-BSR = 2*pi*Nt*rTurb./sqrt(2*cp_exh*T03*(1-PiT.^(-(gamma_exh-1)/gamma_exh)));
+BSR = 2*pi*Nt*rTurb./sqrt(2*cp_exh*T03*(1-PiT.^(-(gamma_exh-1)/gamma_exh)))/60;
 
 % create matrices where every column represents the data from same turbo
 % speed
@@ -125,7 +125,7 @@ end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Compressor modell    %%
+%% Turbin modell    %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TURBIN Mass flow model
 
@@ -146,10 +146,26 @@ par = lsqcurvefit(func, x0, x, y);
 k0 = par(1);
 k1 = par(2);
 
+%%
 % ----- find unknown model parameters using nonlinear least squares method
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TURBIN efficiency model
+x=BSR;
+y=etaT;
+
+% Define reasonable start values on the parameters
+c0ini = 0.8; % 
+c1ini = 50; % 
+x0 = [c0ini c1ini];
+
+% Define the nonlinear function
+f_etaT_BSR = @(a,x)(a(1).*(1 - ((x-a(2))./a(2)).^2));
+func = f_etaT_BSR;
+
+par = lsqcurvefit(func, x0, x, y);
+etaTmax = par(1);
+BSRmax = par(2)
 
 % par=[BSRmax etaTmax];
 % x=[Nt PiT]
