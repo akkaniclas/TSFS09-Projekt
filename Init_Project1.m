@@ -17,7 +17,7 @@ doPlot = 0;                                     % [-] doPlot==1 generate validat
 load('EngineMapTSFS09.mat');
 load('AirStep.mat'); % Load here your dynamic measurements
 load('FuelStep.mat'); %Load here your dynamic measurements
-length=306;
+leength=306;
 
 %%
 %Extra def
@@ -173,7 +173,7 @@ end
 PI = p_im./p_bef_thr;
 
 est_points = [];
-for i=1:length
+for i=1:leength
     if PI(i)<0.73
         est_points = [est_points; i];
     end
@@ -183,7 +183,7 @@ PI_lim = max(PI(est_points), (2/(gamma_air+1))^(gamma_air/(gamma_air-1)));
 Psi = sqrt(2*gamma_air/(gamma_air-1)*(PI_lim.^(2/gamma_air)-PI_lim.^((gamma_air+1)/gamma_air)));
 
 %%%T_bef_thr%%%
-T_hat_bef_thr = ones(length,1)\T_bef_thr;
+T_hat_bef_thr = ones(leength,1)\T_bef_thr;
 %%%%%%%%%%%%%%%
 
 
@@ -257,7 +257,7 @@ disp(['T_bef_thr = ' num2str(T_hat_bef_thr) ' [K]'])
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 b=T_im;
-A= ones(length,1);
+A= ones(leength,1);
 x=A\b;
 T_hat_im = x(1);
 
@@ -279,7 +279,7 @@ end
 n_vol = m_dot_at*n_r*R_air.*T_im./(p_im*V_d*n_cyl.*N);
 
 b=n_vol;
-A=[ones(length,1), sqrt(p_im), N]; 
+A=[ones(leength,1), sqrt(p_im), N]; 
 x=A\b;
 
 n_0=x(1);
@@ -374,7 +374,7 @@ W_ip = V_D*(p_em-p_im);
 m_dot_fc = m_dot_at./(AFs*lambda_bc_cont);
 
 a1 = m_dot_fc*n_r*q_LHV./N*(1-1/r_c^(gamma_air-1)).*min(1,lambda_bc_cont);
-a2 = V_D*ones(length,1);
+a2 = V_D*ones(leength,1);
  
 A = [a1 -a2];
 b = n_r*2*pi*M_b+W_ip;
@@ -445,7 +445,7 @@ m_dot_fc = m_dot_at./(AFs*lambda_bc_cont);
 m_dot_exh = m_dot_at+m_dot_fc;
 
 b = T_em;
-A = [ones(length,1) sqrt(m_dot_exh)]; % Aendrat till roten ur
+A = [ones(leength,1) sqrt(m_dot_exh)]; % Aendrat till roten ur
 
 x = A\b;
 
@@ -482,7 +482,7 @@ m_dot_exh = m_dot_at+m_dot_fc;
 m_dot_amb=m_dot_exh;
 
 est_points = [];
-for i=1:length
+for i=1:leength
     if (p_es(i)-p_amb)>0
         est_points = [est_points; i];
     end
@@ -559,10 +559,10 @@ disp(['tau_lambda = ' num2str(tau_lambda) ' [s]'])
 % This can be used to do special tests with manually selected parameters:
 % Engine speed, throttle reference, wastegate (project2) and pedal position.
 % When all {property}_manual = 0, this block is disconnected by default.
-N_e_manual = 0; N_e_step = 1; NINI = 2000; NEND = NINI;  NeST=30; NeSlope = 1; NeStartTime = 60; NeRampInit = 800;
-alpha_REF_manual = 0; alphaINI = 0.0; alphaEND = alphaINI; alphaST=30;
-wg_REF_manual = 0; wgINI = 100; wgEND = wgINI; wgST=30;
-pedPos_manual = 0; pedINI = 0.2; pedEND = 1.0; pedST=30;
+N_e_manual = 1; N_e_step = 1; NINI = 2000; NEND = NINI;  NeST=30; NeSlope = 1; NeStartTime = 60; NeRampInit = 800;
+alpha_REF_manual = 1; alphaINI = 0.0; alphaEND = alphaINI; alphaST=30;
+wg_REF_manual = 1; wgINI = 100; wgEND = wgINI; wgST=30;
+pedPos_manual = 1; pedINI = 0.2; pedEND = 1.0; pedST=30;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -609,13 +609,13 @@ K_I=0.03;
 % Aftertreatment when the simulation is complete %
 % ---------------------------------------------- %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-sim('Project_template.slx')
+%sim('Project_template.slx')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%     Light-Off computation      %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-lightOff = 0;
+%lightOff = 0;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%      Compute emissions        %%
@@ -628,9 +628,9 @@ lightOff = 0;
 % dmfAct: Fuel flow to the cylinder in kg / s
 % lightoff: Time in seconds until the light-Off
 
-calcEmissions(t, lambda_cyl, Distance, dmacAct, dmfcAct, lightOff);
+%calcEmissions(t, lambda_cyl, Distance, dmacAct, dmfcAct, lightOff);
 
 %Calculate fuel consumption
-fuelCons = fuel(end)/0.75/Distance(end)*100000;
+%fuelCons = fuel(end)/0.75/Distance(end)*100000;
   
-disp(sprintf('Fuel Consumption: %1.2f [l/(10 mil)]',fuelCons))
+%disp(sprintf('Fuel Consumption: %1.2f [l/(10 mil)]',fuelCons))

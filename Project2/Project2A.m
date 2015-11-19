@@ -203,9 +203,9 @@ func = f_etaT_mod;
 
 par = lsqcurvefit(func, x0, x, y);
 etaTmax = par(1);
-BSRmax = par(2)
+BSRmax = par(2);
 
-etaT_mod = f_etaT_mod(par,x)
+etaT_mod = f_etaT_mod(par,x);
 
 etaT_mod_M = reshape(etaT_mod,6,5);
 

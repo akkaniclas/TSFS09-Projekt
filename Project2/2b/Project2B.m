@@ -13,11 +13,11 @@ figpath='Figures/';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Initialization %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-run ??????????;                                             %run init_project1.m to load model parameters
+run Init_Project1.m;                                             %run init_project1.m to load model parameters
 run Project2A.m;                                            %Load turbo model parameters from the second project by running project2A.m
 load('TqEvsNeMAP.mat')                                      % Load the torque v.s speed map
 doPlot = 1;                                                 % should figures be plotted or not
-sim_model_name = '????????????????';                        %specify name of the simulink model for project2B
+sim_model_name = 'Project_template_2b';                        %specify name of the simulink model for project2B
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Driver model parameters (should not be changed)
@@ -27,11 +27,11 @@ KiDriver        = 0.05;
 Boost_control = 1;          % Activating the boost controller block
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Setting the controller parameters in the boostcontroller block
-KpThr = ??;        %these should be 
-TiThr = ??;      %????????;
+%KpThr = ??;        %these should be 
+%TiThr = ??;      %????????;
  
-KpWg = ?????????;
-TiWg = ?????????;
+%KpWg = ?????????;
+%TiWg = ?????????;
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Many parameters have same values as in project 1:
 % V_em, V_im, V_es, PI_bl, r_c
