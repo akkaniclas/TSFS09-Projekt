@@ -9,7 +9,7 @@
 figNr=1;
 figpath='Figures/';
 
-doPlot=1;
+doPlot=0;
 doExpFig=0;
 doSimulinkFig=0;
 
@@ -233,7 +233,7 @@ A=[-ones(length(p_im),1) p_im];
 
 par=A\bmep;
 
-bmep_mod=A*par
+bmep_mod=A*par;
 
 if doPlot
     close all
