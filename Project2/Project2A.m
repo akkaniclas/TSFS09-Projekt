@@ -19,7 +19,7 @@ doSimulinkFig=0;
 
 %clear all; close all;
 load turboMap
-load EnginemapTSFS09
+load('EngineMapTSFS09.mat');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Load mesurement data and parameters %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

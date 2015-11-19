@@ -19,6 +19,15 @@ load('TqEvsNeMAP.mat')                                      % Load the torque v.
 doPlot = 1;                                                 % should figures be plotted or not
 sim_model_name = 'Project_template_2b';                        %specify name of the simulink model for project2B
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Edit stupid parameters %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+T_es=mean(T_es);
+p_es=mean(p_es);
+T_ic=mean(T_ic);
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Driver model parameters (should not be changed)
 KpDriver        = 0.8;                         
