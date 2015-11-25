@@ -16,7 +16,7 @@ figpath='Figures/';
 run Init_Project1.m;                                             %run init_project1.m to load model parameters
 run Project2A.m;                                            %Load turbo model parameters from the second project by running project2A.m
 load('TqEvsNeMAP.mat')                                      % Load the torque v.s speed map
-doPlot = 1;                                                 % should figures be plotted or not
+doPlot = 0;                                                 % should figures be plotted or not
 sim_model_name = 'Project_template_2b';                        %specify name of the simulink model for project2B
 
 
@@ -33,12 +33,12 @@ Boost_control = 1;          % Activating the boost controller block
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Setting the controller parameters in the boostcontroller block
 %%%%%%%%%%%%
-KpThr = 0.2*10^-5;     
-TiThr = 0.5;  
+KpThr = 2*10^-6;     
+TiThr = 0.1;  
 %%%%%%%%%%%%%
  
-KpWg = 0.8;
-TiWg = 0.05;
+KpWg = 3e-6;
+TiWg = 5;
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Many parameters have same values as in project 1:
 % V_em, V_im, V_es, PI_bl, r_c
@@ -66,7 +66,7 @@ dP_thrREF = 10e3;         % Default desired pressure loss over the throttle
 tau_wg = 0.1;             % Wastegate actuator dynamics, estimated from measurement data
 
 % over-writing the throttle model parameter value for lower idle w_ice
-a0= 0.8e-05;
+a_0= 0.7e-05;
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Edit stupid parameters %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -138,11 +138,11 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %ECU I/O
 KpWg = 5*10^-6;
-TiWg = 1e-6;
+TiWg = 1;
 
 N_e_manual = 1; N_e_step = 1; NINI = 2400; NEND = NINI;  % Konstnt varvtal 2400rpm
 alpha_REF_manual = 0; 
-wg_REF_manual = 0; 
+wg_REF_manual = 1; 
 pedPos_manual = 1; pedINI = 0.6; pedEND = 0.8; pedST=10;  % Steg i pedal position
 % Driver Model settings
 set_param([sim_model_name,'/Driver Model/Manual Gear Switch'],'sw','1')
@@ -150,7 +150,7 @@ set_param([sim_model_name,'/Driver Model/Manual Clutch Switch'],'sw','1')
 set_param([sim_model_name,'/Driver Model/Manual acc ped Switch'],'sw','1')
 set_param([sim_model_name,'/Driver Model/Manual Brake Switch'],'sw','1')
 set_param([sim_model_name,'/ECU/Boost Control/thr_feedback_switch'],'sw','1') % Include throttle feedback in the simulations
-set_param([sim_model_name,'/ECU/Boost Control/wg_feedback_switch'],'sw','1')  % Include throttle feedback in the simulations
+set_param([sim_model_name,'/ECU/Boost Control/wg_feedback_switch'],'sw','0')  % Include throttle feedback in the simulations
 
 % Simmulera och plotta
 set_param(sim_model_name,'StopTime','15') % 10s simulering
