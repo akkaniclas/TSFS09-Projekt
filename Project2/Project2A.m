@@ -148,7 +148,7 @@ if doPlot
    % legend('Measured', 'Model', 'Location','northwest')
     xlabel('$\dot{m}_\textrm{c,corr}$ [kg/s]', 'interpreter', 'latex')
     ylabel('\Pi_c [-]')
-    saveas(h,'Figures\compressor_efficiensy','png')
+    saveas(h,'Figures\compressor_efficiency','png')
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -232,6 +232,8 @@ p_im=EngineMap.p_im;
 A=[-ones(length(p_im),1) p_im];
 
 par=A\bmep;
+C_P0 = par(1);
+C_P1 = par(2);
 
 bmep_mod=A*par;
 

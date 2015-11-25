@@ -20,12 +20,8 @@ doPlot = 1;                                                 % should figures be 
 sim_model_name = 'Project_template_2b';                        %specify name of the simulink model for project2B
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Edit stupid parameters %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%
-T_es=mean(T_es);
-p_es=mean(p_es);
-T_ic=mean(T_ic);
+%%
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -36,11 +32,13 @@ KiDriver        = 0.05;
 Boost_control = 1;          % Activating the boost controller block
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Setting the controller parameters in the boostcontroller block
-%KpThr = ??;        %these should be 
-%TiThr = ??;      %????????;
+%%%%%%%%%%%%
+KpThr = 0.2*10^-5;     
+TiThr = 0.5;  
+%%%%%%%%%%%%%
  
-%KpWg = ?????????;
-%TiWg = ?????????;
+KpWg = 0.8;
+TiWg = 0.05;
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Many parameters have same values as in project 1:
 % V_em, V_im, V_es, PI_bl, r_c
@@ -69,8 +67,12 @@ tau_wg = 0.1;             % Wastegate actuator dynamics, estimated from measurem
 
 % over-writing the throttle model parameter value for lower idle w_ice
 a0= 0.8e-05;
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Edit stupid parameters %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+T_es=mean(T_es);
+p_es=mean(p_es);
+T_ic=mean(T_ic);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Exercise 4 %% Throttle controller test
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -90,12 +92,14 @@ set_param([sim_model_name,'/ECU/Boost Control/wg_feedback_switch'],'sw','0')
 %%%%%%%%%%%%%%%%%%%%
 %% Exercise 4b %%
 %%%%%%%%%%%%%%%%%%%%
+
 set_param([sim_model_name,'/ECU/Boost Control/thr_feedback_switch'],'sw','1') % Include throttle feedback in the simulations
 set_param(sim_model_name,'StopTime','10')                                     % final simulation time
 sim(sim_model_name) % Simulera modellen
 
 
 if doPlot
+    close all
     figure(figNr); clf;
     plot(t,p_im/1000)
     title('Stegsvar insugstryck vid steg i gaspedal');
@@ -116,16 +120,26 @@ sim(sim_model_name) % Simulera modellen
 
 %Skapa plottar.
 if doPlot
-    %
-    %plot Pim vs Pim,ref
-    %
-    %
+    %close all
+    figure(figNr); clf;
+    plot(t,p_im/1000)
+    title('Stegsvar insugstryck vid steg i gaspedal');
+    xlabel('Time [s]')
+    ylabel('Pim [KPa]')
+    hold on
+    plot(p_im_ref.time,p_im_ref.signals.values/1000,'r')
+    legend('Insugstryck','Insugstryckreferens')
+    figNr=figNr + 1;
+    grid on
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Exercise 5 %% Wastegate controller test
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %ECU I/O
+KpWg = 5*10^-6;
+TiWg = 1e-6;
+
 N_e_manual = 1; N_e_step = 1; NINI = 2400; NEND = NINI;  % Konstnt varvtal 2400rpm
 alpha_REF_manual = 0; 
 wg_REF_manual = 0; 
@@ -144,7 +158,28 @@ sim(sim_model_name) % Simulera modellen
 
 % %Plotta
 if doPlot
+    close all;
+    h=figure;
     % create a subplot(4,1,-) and plot pedal position, Pim_ref vs Pim, Pic_ref vs Pic, Engine torque 
+    subplot(2,1,1)
+    plot(t,p_im/1000)
+    title('Stegsvar insugstryck vid steg i gaspedal');
+    xlabel('Time [s]')
+    ylabel('Pim [KPa]')
+    hold on
+    plot(p_im_ref.time,p_im_ref.signals.values/1000,'r')
+    legend('Insugstryck','Insugstryckreferens')
+    grid on
+    subplot(2,1,2)
+    plot(t,p_ic/1000)
+    title('Stegsvar intercooler-tryck vid steg i gaspedal');
+    xlabel('Time [s]')
+    ylabel('Pic [KPa]')
+    hold on
+    plot(p_ic_ref.time,p_ic_ref.signals.values/1000,'r')
+    legend('Intercooler-tryck','Intercooler-tryckreferens')
+    grid on
+    
 end
 
 

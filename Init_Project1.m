@@ -559,9 +559,9 @@ disp(['tau_lambda = ' num2str(tau_lambda) ' [s]'])
 % This can be used to do special tests with manually selected parameters:
 % Engine speed, throttle reference, wastegate (project2) and pedal position.
 % When all {property}_manual = 0, this block is disconnected by default.
-N_e_manual = 1; N_e_step = 1; NINI = 2000; NEND = NINI;  NeST=30; NeSlope = 1; NeStartTime = 60; NeRampInit = 800;
-alpha_REF_manual = 1; alphaINI = 0.1; alphaEND = 0.35; alphaST=10;
-wg_REF_manual = 1; wgINI = 1; wgEND = wgINI; wgST=30;
+N_e_manual = 0; N_e_step = 1; NINI = 2000; NEND = NINI;  NeST=30; NeSlope = 1; NeStartTime = 60; NeRampInit = 800;
+alpha_REF_manual = 0; alphaINI = 0.1; alphaEND = 0.35; alphaST=10;
+wg_REF_manual = 0; wgINI = 1; wgEND = wgINI; wgST=30;
 pedPos_manual = 0; pedINI = 0.2; pedEND = 1.0; pedST=30;
 
 
