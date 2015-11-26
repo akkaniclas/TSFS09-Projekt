@@ -33,11 +33,11 @@ Boost_control = 1;          % Activating the boost controller block
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Setting the controller parameters in the boostcontroller block
 %%%%%%%%%%%%
-KpThr = 2*10^-6;     
+KpThr = 1*10^-6;     
 TiThr = 0.1;  
 %%%%%%%%%%%%%
  
-KpWg = 3e-6;
+KpWg = 10e-6;
 TiWg = 5;
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Many parameters have same values as in project 1:
@@ -66,9 +66,9 @@ dP_thrREF = 10e3;         % Default desired pressure loss over the throttle
 tau_wg = 0.1;             % Wastegate actuator dynamics, estimated from measurement data
 
 % over-writing the throttle model parameter value for lower idle w_ice
-a_0= 0.7e-05;
+a_0= 0.6e-05;
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Edit stupid parameters %%
+% Edit stupid parameters %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 T_es=mean(T_es);
 p_es=mean(p_es);
@@ -100,16 +100,16 @@ sim(sim_model_name) % Simulera modellen
 
 if doPlot
     close all
-    figure(figNr); clf;
+    h=figure; clf;
     plot(t,p_im/1000)
-    title('Stegsvar insugstryck vid steg i gaspedal');
+    title('Throttle controller test');
     xlabel('Time [s]')
-    ylabel('Pim [KPa]')
+    ylabel('P_{im }[kPa]')
     hold on
     plot(p_im_ref.time,p_im_ref.signals.values/1000,'r')
-    legend('Insugstryck','Insugstryckreferens')
-    figNr=figNr + 1;
+    legend('P_{im}','P_{im,ref}','Location','northwest')
     grid on
+    saveas(h,'Figures\4b','png')
 end
 
 %%%%%%%%%%%%%%%%%%%%
@@ -121,28 +121,25 @@ sim(sim_model_name) % Simulera modellen
 %Skapa plottar.
 if doPlot
     %close all
-    figure(figNr); clf;
+    h=figure; clf;
     plot(t,p_im/1000)
-    title('Stegsvar insugstryck vid steg i gaspedal');
+    title('Throttle controller test');
     xlabel('Time [s]')
     ylabel('Pim [KPa]')
     hold on
     plot(p_im_ref.time,p_im_ref.signals.values/1000,'r')
-    legend('Insugstryck','Insugstryckreferens')
-    figNr=figNr + 1;
+    legend('P_{im}','P_{im,ref}','Location','northwest')
     grid on
+    saveas(h,'Figures\4c','png')
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Exercise 5 %% Wastegate controller test
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %ECU I/O
-KpWg = 5*10^-6;
-TiWg = 1;
-
 N_e_manual = 1; N_e_step = 1; NINI = 2400; NEND = NINI;  % Konstnt varvtal 2400rpm
 alpha_REF_manual = 0; 
-wg_REF_manual = 1; 
+wg_REF_manual = 0; 
 pedPos_manual = 1; pedINI = 0.6; pedEND = 0.8; pedST=10;  % Steg i pedal position
 % Driver Model settings
 set_param([sim_model_name,'/Driver Model/Manual Gear Switch'],'sw','1')
@@ -150,35 +147,48 @@ set_param([sim_model_name,'/Driver Model/Manual Clutch Switch'],'sw','1')
 set_param([sim_model_name,'/Driver Model/Manual acc ped Switch'],'sw','1')
 set_param([sim_model_name,'/Driver Model/Manual Brake Switch'],'sw','1')
 set_param([sim_model_name,'/ECU/Boost Control/thr_feedback_switch'],'sw','1') % Include throttle feedback in the simulations
-set_param([sim_model_name,'/ECU/Boost Control/wg_feedback_switch'],'sw','0')  % Include throttle feedback in the simulations
+set_param([sim_model_name,'/ECU/Boost Control/wg_feedback_switch'],'sw','1')  % Include throttle feedback in the simulations
 
 % Simmulera och plotta
 set_param(sim_model_name,'StopTime','15') % 10s simulering
 sim(sim_model_name) % Simulera modellen
 
-% %Plotta
+%% Plotta
 if doPlot
     close all;
-    h=figure;
     % create a subplot(4,1,-) and plot pedal position, Pim_ref vs Pim, Pic_ref vs Pic, Engine torque 
-    subplot(2,1,1)
+    h=figure;
+    title('Wastegate controller test');
+    subplot(4,1,1)
+    plot(t,Pedal_Pos)
+    ylabel('Pos [-]')
+    axis([5, 15,0.5,0.9 ])
+    grid on
+    subplot(4,1,2)
     plot(t,p_im/1000)
-    title('Stegsvar insugstryck vid steg i gaspedal');
-    xlabel('Time [s]')
-    ylabel('Pim [KPa]')
+    ylabel('P_{im} [KPa]')
+    axis([5, 15,130,200 ])
     hold on
     plot(p_im_ref.time,p_im_ref.signals.values/1000,'r')
-    legend('Insugstryck','Insugstryckreferens')
+    legend('P_{im}','P_{im,ref}', 'Location','northwest')
     grid on
-    subplot(2,1,2)
+    subplot(4,1,3)
     plot(t,p_ic/1000)
-    title('Stegsvar intercooler-tryck vid steg i gaspedal');
-    xlabel('Time [s]')
-    ylabel('Pic [KPa]')
+    axis([5, 15,130,200 ])
+
+    ylabel('P_{ic} [KPa]')
     hold on
     plot(p_ic_ref.time,p_ic_ref.signals.values/1000,'r')
-    legend('Intercooler-tryck','Intercooler-tryckreferens')
+    legend('P_{ic}','P_{ic,ref}', 'Location','northwest')
     grid on
+    
+    subplot(4,1,4)
+    plot(t,Tq_e)
+    xlabel('Time [s]')
+    ylabel('Torque [Nm]')
+    grid on
+    axis([5, 15,100,200 ])
+    saveas(h,'Figures\5','png')
     
 end
 
@@ -197,24 +207,43 @@ set_param([sim_model_name,'/Driver Model/Manual Clutch Switch'],'sw','1')  % Man
 set_param([sim_model_name,'/Driver Model/Manual acc ped Switch'],'sw','1') % Manuell gas
 set_param([sim_model_name,'/Driver Model/Manual Brake Switch'],'sw','1')   % Manuell broms
 % Simmulera och plotta
-set_param(sim_model_name,'StopTime','?????') % The engine speed ramp is defined in line 141, calculate the time required for following the whole ramp.
+set_param(sim_model_name,'StopTime','5360') % The engine speed ramp is defined in line 141, calculate the time required for following the whole ramp.
 sim(sim_model_name)
 
+%%
+load N_e_ramp_data
+close all
 % Plotta resultat
 if doPlot
 % plot the torque from engine vs torque from the interpolation curves on
 % same figure for different engine speeds
+    h = figure;
+    plot(N_e,Tq_e)
+    title('Torque when ramp in engine speed');
+    xlabel('Engine speed [Rpm]')
+    ylabel('Torque [Nm]')
+    hold on
+    plot(N_e,Tq_max_inter,'r')
+    legend('Modelled engine torque','Interpolation table engine torque', 'Location','southwest')
+    grid on
+    saveas(h,'Figures\6a','png')
+
 end
 
 
 %Plotta kompressornstryckkvot(WcCorr)
 if doPlot
-    figure(figNr);clf;
+    h=figure;clf;
     % plot the compressor mass flow as function of pressure ratio
+    plot(m_dot_cCorr_sim.Data,PiC_sim,'b-.')
     hold on
     plot(m_dot_cCorr_M,PiC_M,'r')   % These come from turbomap and are calculated in project2A.m
-    xlabel('$\dot{m}_\textrm{c,corr}$ [kg/s]');
+    xlabel('$\dot{m}_\textrm{c,corr}$ [kg/s]', 'Interpreter', 'latex');
     ylabel('\Pi_c [-]');
+    legend('Modelled', 'Engine map', 'Location','southwest')
+    grid on
+    title('Compressor mass flow and pressure ratio');
+    saveas(h,'Figures\6b','png')
 end
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -237,10 +266,17 @@ set_param([sim_model_name,'/Driver Model/Manual Brake Switch'],'sw','1')   % Man
 set_param(sim_model_name,'StopTime','60') % 60s simuleringa
 sim(sim_model_name)                       % Simulerar modellen
 
+%%
 %plotta hastighetsprofil
 if doPlot
 % plot the vehicle speed and show how much time is required for 70-110 km/h
 % acceleration
+    h = figure;
+    plot(t,VehicleSpeed)
+    xlabel('time [s]', 'Interpreter', 'latex');
+    ylabel('Vehicle Speed [km/h]');
+    title('Acceleration test');
+    saveas(h,'Figures\7a','png')
 end
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%  
@@ -260,18 +296,57 @@ set_param([sim_model_name,'/Driver Model/Manual Brake Switch'],'sw','0')
 set_param(sim_model_name,'StopTime','600') % 600s simulering
 sim(sim_model_name)                        % Simulerar modellen
 
-% plotta resultatet.
+%% plotta resultatet.
 if doPlot
     
     % after running the drive cycle, plot: engine torque, engine speed,
     % intake manifold pressure, lambda, intake manifold pressure.
+    h = figure;
+    subplot(4,1,1)
+    plot(t,Tq_e)    
+    grid on
+    ylabel('Engine Torque [Nm]')
     
+    subplot(4,1,2)
+    plot(t,N_e)    
+    grid on
+    ylabel('Engine speed [RPM]')
+    
+    subplot(4,1,3)
+    plot(t,p_im)    
+    grid on
+    ylabel('Intake manifold pressure [kPa]')
+    subplot(4,1,4)
+    plot(t,lambda_cyl)    
+    grid on
+    ylabel('Lambda, cylinder [-]')
+    xlabel('Time [s]')
+    
+     title('Drive cycle test');
+    saveas(h,'Figures\7b','png')
+       
 end
 
+%% Beräkan emission och bränsleförbrukning
+lightOff = 38;
 
-%Beräkan emission och bränsleförbrukning
-checkEmissions   % this calculates the emmissions after running the drive cycle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      Compute emissions        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Inputs to calcEmissions
+% tout: Time Vector from Simulink
+% lambda: Continuous lambda
+% Distance: Distance traveled in meters
+% dmacAct: Mass air flow to the cylinder in kg / s
+% dmfAct: Fuel flow to the cylinder in kg / s
+% lightoff: Time in seconds until the light-Off
 
+calcEmissions(t, lambda_cyl, Distance, dmacAct, dmfcAct, lightOff);
+
+%Calculate fuel consumption
+fuelCons = fuel(end)/0.75/Distance(end)*100000;
+  
+disp(sprintf('Fuel Consumption: %1.2f [l/(10 mil)]',fuelCons))
 
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -291,9 +366,29 @@ set_param([sim_model_name,'/Driver Model/Manual Brake Switch'],'sw','0')
 set_param(sim_model_name,'StopTime','70')  
 sim(sim_model_name) % Simulera modellen
 
-% Plotta resultat
+%% Plotta resultat
 if doPlot
 % plot the engine torque, alpha-thr and turbo speed in a subplot
+    h = figure;
+    subplot(3,1,1)
+    plot(t,Tq_e)    
+    grid on
+    title('Maximal torque');
+    axis([-inf,inf,-30,300])
+    ylabel('Engine Torque [Nm]')
+    
+    subplot(3,1,2)
+    plot(t,alpha_thr)    
+    grid on
+    ylabel('Throttle agle [-]')
+    
+    subplot(3,1,3)
+    plot(t,w_tc)    
+    grid on
+    ylabel('Turbo speed [rad/s]')
+    xlabel('Time [s]')
+    
+    saveas(h,'Figures\8','png')
 end
 
 
