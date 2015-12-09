@@ -38,7 +38,7 @@ TiThr = 0.1;
 %%%%%%%%%%%%%
  
 KpWg = 10e-6;
-TiWg = 5;
+TiWg = 10;
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Many parameters have same values as in project 1:
 % V_em, V_im, V_es, PI_bl, r_c
@@ -137,6 +137,10 @@ end
 %% Exercise 5 %% Wastegate controller test
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %ECU I/O
+
+KpWg = 2e-6;
+TiWg = 1;
+
 N_e_manual = 1; N_e_step = 1; NINI = 2400; NEND = NINI;  % Konstnt varvtal 2400rpm
 alpha_REF_manual = 0; 
 wg_REF_manual = 0; 
@@ -153,7 +157,7 @@ set_param([sim_model_name,'/ECU/Boost Control/wg_feedback_switch'],'sw','1')  % 
 set_param(sim_model_name,'StopTime','15') % 10s simulering
 sim(sim_model_name) % Simulera modellen
 
-%% Plotta
+% Plotta
 if doPlot
     close all;
     % create a subplot(4,1,-) and plot pedal position, Pim_ref vs Pim, Pic_ref vs Pic, Engine torque 
