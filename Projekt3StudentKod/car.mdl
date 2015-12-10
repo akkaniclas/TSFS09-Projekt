@@ -1,13 +1,13 @@
 Model {
   Name			  "car"
-  Version		  8.6
+  Version		  8.4
   MdlSubVersion		  0
-  SavedCharacterEncoding  "ISO-8859-1"
+  SavedCharacterEncoding  "windows-1252"
   GraphicalInterface {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.881"
+    ComputedModelVersion    "1.885"
     NumModelReferences	    0
     NumTestPointedSignals   30
     TestPointedSignal {
@@ -185,9 +185,9 @@ Model {
 	IsActive		[1]
 	ViewObjType		"SimulinkSubsys"
 	LoadSaveID		"12:38"
-	Extents			[1448.0, 831.0]
-	ZoomFactor		[1.25]
-	Offset			[-217.97337690184963, -161.12004303245584]
+	Extents			[1437.0, 826.0]
+	ZoomFactor		[1.3439847382854415]
+	Offset			[4.3332150461320076, -43.355177655333733]
       }
     }
   }
@@ -195,11 +195,11 @@ Model {
   Creator		  "erihe433"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "danfa688"
+  LastModifiedBy	  "nicgr354"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Dec 08 14:20:02 2015"
-  RTWModifiedTimeStamp	  371484918
-  ModelVersionFormat	  "1.%<AutoIncrement:881>"
+  LastModifiedDate	  "Thu Dec 10 11:53:29 2015"
+  RTWModifiedTimeStamp	  371649207
+  ModelVersionFormat	  "1.%<AutoIncrement:885>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -217,7 +217,6 @@ Model {
   SortedOrder		  off
   ExecutionContextIcon	  off
   ShowLinearizationAnnotations on
-  ShowVisualizeInsertedRTB on
   ShowMarkup		  on
   BlockNameDataTip	  off
   BlockParametersDataTip  off
@@ -257,6 +256,27 @@ Model {
       PropName		      "logAsSpecifiedByModelsSSIDs_"
     }
   }
+  RecordCoverage	  off
+  CovPath		  "/"
+  CovSaveName		  "covdata"
+  CovMetricSettings	  "dw"
+  CovNameIncrementing	  off
+  CovHtmlReporting	  on
+  CovForceBlockReductionOff on
+  CovEnableCumulative	  on
+  covSaveCumulativeToWorkspaceVar on
+  CovSaveSingleToWorkspaceVar on
+  CovCumulativeVarName	  "covCumulativeData"
+  CovCumulativeReport	  off
+  CovReportOnPause	  on
+  CovModelRefEnable	  "Off"
+  CovExternalEMLEnable	  off
+  CovSFcnEnable		  off
+  CovBoundaryAbsTol	  0.000010
+  CovBoundaryRelTol	  0.010000
+  CovUseTimeInterval	  off
+  CovStartTime		  0
+  CovStopTime		  0
   ExtModeBatchMode	  off
   ExtModeEnableFloating	  on
   ExtModeTrigType	  "manual"
@@ -278,6 +298,7 @@ Model {
   ExtModeSkipDownloadWhenConnect off
   ExtModeLogAll		  on
   ExtModeAutoUpdateStatusClock off
+  BufferReuse		  on
   ShowModelReferenceBlockVersion off
   ShowModelReferenceBlockIO off
   Array {
@@ -285,13 +306,13 @@ Model {
     Dimension		    1
     Simulink.ConfigSet {
       $ObjectID		      7
-      Version		      "1.15.1"
+      Version		      "1.14.3"
       Array {
 	Type			"Handle"
 	Dimension		9
 	Simulink.SolverCC {
 	  $ObjectID		  8
-	  Version		  "1.15.1"
+	  Version		  "1.14.3"
 	  StartTime		  "0.0"
 	  StopTime		  "60"
 	  AbsTol		  "auto"
@@ -318,8 +339,6 @@ Model {
 	  ZeroCrossControl	  "UseLocalSettings"
 	  ZeroCrossAlgorithm	  "Nonadaptive"
 	  AlgebraicLoopSolver	  "TrustRegion"
-	  SolverInfoToggleStatus  off
-	  IsAutoAppliedInSIP	  off
 	  SolverResetMethod	  "Fast"
 	  PositivePriorityOrder	  off
 	  AutoInsertRateTranBlk	  off
@@ -328,7 +347,7 @@ Model {
 	}
 	Simulink.DataIOCC {
 	  $ObjectID		  9
-	  Version		  "1.15.1"
+	  Version		  "1.14.3"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
 	  FinalStateName	  "xFinal"
@@ -347,8 +366,6 @@ Model {
 	  DSMLogging		  on
 	  InspectSignalLogs	  off
 	  VisualizeSimOutput	  on
-	  StreamToWorkspace	  off
-	  StreamVariableName	  "streamout"
 	  SaveTime		  on
 	  ReturnWorkspaceOutputs  off
 	  StateSaveName		  "xout"
@@ -360,11 +377,10 @@ Model {
 	  OutputTimes		  "[]"
 	  ReturnWorkspaceOutputsName "out"
 	  Refine		  "1"
-	  LoggingIntervals	  "[-inf, inf]"
 	}
 	Simulink.OptimizationCC {
 	  $ObjectID		  10
-	  Version		  "1.15.1"
+	  Version		  "1.14.3"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    4
@@ -377,8 +393,8 @@ Model {
 	  BlockReduction	  on
 	  BooleanDataType	  on
 	  ConditionallyExecuteInputs on
-	  DefaultParameterBehavior "Tunable"
-	  UseDivisionForNetSlopeComputation "off"
+	  InlineParams		  off
+	  UseDivisionForNetSlopeComputation "Off"
 	  UseFloatMulNetSlope	  off
 	  DefaultUnderspecifiedDataType	"double"
 	  UseSpecifiedMinMax	  off
@@ -395,13 +411,15 @@ Model {
 	  EnableMemcpy		  on
 	  MemcpyThreshold	  64
 	  PassReuseOutputArgsAs	  "Structure reference"
-	  PassReuseOutputArgsThreshold 12
 	  ExpressionDepthLimit	  2147483647
+	  FoldNonRolledExpr	  on
 	  LocalBlockOutputs	  on
 	  RollThreshold		  5
+	  SystemCodeInlineAuto	  off
 	  StateBitsets		  off
 	  DataBitsets		  off
 	  ActiveStateOutputEnumStorageType "Native Integer"
+	  UseTempVars		  off
 	  ZeroExternalMemoryAtStartup on
 	  ZeroInternalMemoryAtStartup on
 	  InitFltsAndDblsToZero	  on
@@ -412,12 +430,13 @@ Model {
 	  LifeSpan		  "inf"
 	  MaxStackSize		  "Inherit from target"
 	  BufferReusableBoundary  on
-	  SimCompilerOptimization "off"
+	  SimCompilerOptimization "Off"
 	  AccelVerboseBuild	  off
+	  ParallelExecutionInRapidAccelerator on
 	}
 	Simulink.DebuggingCC {
 	  $ObjectID		  11
-	  Version		  "1.15.1"
+	  Version		  "1.14.3"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
 	  ArrayBoundsChecking	  "none"
@@ -444,6 +463,7 @@ Model {
 	  IgnoredZcDiagnostic	  "warning"
 	  SolverPrmCheckMsg	  "none"
 	  InheritedTsInSrcMsg	  "warning"
+	  DiscreteInheritContinuousMsg "warning"
 	  MultiTaskDSMMsg	  "warning"
 	  MultiTaskCondExecSysMsg "none"
 	  MultiTaskRateTransMsg	  "error"
@@ -476,11 +496,12 @@ Model {
 	  BusObjectLabelMismatch  "warning"
 	  RootOutportRequireBusObject "warning"
 	  AssertControl		  "UseLocalSettings"
-	  AllowSymbolicDim	  off
+	  EnableOverflowDetection off
 	  ModelReferenceIOMsg	  "none"
 	  ModelReferenceMultiInstanceNormalModeStructChecksumCheck "error"
 	  ModelReferenceVersionMismatchMessage "none"
 	  ModelReferenceIOMismatchMessage "none"
+	  ModelReferenceCSMismatchMessage "none"
 	  UnknownTsInhSupMsg	  "warning"
 	  ModelReferenceDataLoggingMessage "warning"
 	  ModelReferenceSymbolNameMessage "warning"
@@ -492,7 +513,7 @@ Model {
 	  StrictBusMsg		  "ErrorLevel1"
 	  BusNameAdapt		  "WarnAndRepair"
 	  NonBusSignalsTreatedAsBus "none"
-	  SymbolicDimMinMaxWarning "warning"
+	  LoggingUnavailableSignals "error"
 	  BlockIODiagnostic	  "none"
 	  SFUnusedDataAndEventsDiag "warning"
 	  SFUnexpectedBacktrackingDiag "warning"
@@ -502,12 +523,11 @@ Model {
 	  SFUnconditionalTransitionShadowingDiag "warning"
 	  SFUndirectedBroadcastEventsDiag "warning"
 	  SFTransitionActionBeforeConditionDiag	"warning"
-	  SFOutputUsedAsStateInMooreChartDiag "error"
 	  IntegerSaturationMsg	  "warning"
 	}
 	Simulink.HardwareCC {
 	  $ObjectID		  12
-	  Version		  "1.15.1"
+	  Version		  "1.14.3"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
 	  ProdBitPerInt		  32
@@ -539,6 +559,7 @@ Model {
 	  TargetIntDivRoundTo	  "Undefined"
 	  TargetEndianess	  "Unspecified"
 	  TargetWordSize	  32
+	  TargetTypeEmulationWarnSuppressLevel 0
 	  TargetPreprocMaxBitsSint 32
 	  TargetPreprocMaxBitsUint 32
 	  TargetHWDeviceType	  "Specified"
@@ -547,9 +568,8 @@ Model {
 	}
 	Simulink.ModelReferenceCC {
 	  $ObjectID		  13
-	  Version		  "1.15.1"
+	  Version		  "1.14.3"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
-	  EnableRefExpFcnMdlSchedulingChecks on
 	  CheckModelReferenceTargetMessage "error"
 	  EnableParallelModelReferenceBuilds off
 	  ParallelModelReferenceErrorOnInvalidPool on
@@ -563,9 +583,13 @@ Model {
 	}
 	Simulink.SFSimCC {
 	  $ObjectID		  14
-	  Version		  "1.15.1"
+	  Version		  "1.14.3"
+	  SFSimEnableDebug	  on
+	  SFSimOverflowDetection  on
 	  SFSimEcho		  on
+	  SimBlas		  on
 	  SimCtrlC		  on
+	  SimExtrinsic		  on
 	  SimIntegrity		  on
 	  SimUseLocalCustomCode	  off
 	  SimParseCustomCode	  on
@@ -575,7 +599,7 @@ Model {
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
 	  $ObjectID		  15
-	  Version		  "1.15.1"
+	  Version		  "1.14.3"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    1
@@ -588,6 +612,7 @@ Model {
 	  MakeCommand		  "make_rtw"
 	  GenerateMakefile	  on
 	  PackageGeneratedCodeAndArtifacts off
+	  PackageName		  ""
 	  TemplateMakefile	  "grt_default_tmf"
 	  PostCodeGenCommand	  ""
 	  Description		  ""
@@ -599,8 +624,20 @@ Model {
 	  TLCDebug		  off
 	  TLCCoverage		  off
 	  TLCAssert		  off
+	  ProcessScriptMode	  "Default"
+	  ConfigurationMode	  "Optimized"
+	  ProcessScript		  ""
+	  ConfigurationScript	  ""
+	  ConfigAtBuild		  off
 	  RTWUseLocalCustomCode	  off
 	  RTWUseSimCustomCode	  off
+	  CustomSourceCode	  ""
+	  CustomHeaderCode	  ""
+	  CustomInclude		  ""
+	  CustomSource		  ""
+	  CustomLibrary		  ""
+	  CustomInitializer	  ""
+	  CustomTerminator	  ""
 	  Toolchain		  "Automatically locate an installed toolchain"
 	  BuildConfiguration	  "Faster Builds"
 	  IncludeHyperlinkInReport off
@@ -614,25 +651,28 @@ Model {
 	  SILDebugging		  off
 	  TargetLang		  "C"
 	  IncludeBusHierarchyInRTWFileBlockHierarchyMap	off
+	  IncludeERTFirstTime	  off
 	  GenerateTraceInfo	  off
 	  GenerateTraceReport	  off
 	  GenerateTraceReportSl	  off
 	  GenerateTraceReportSf	  off
 	  GenerateTraceReportEml  off
+	  GenerateCodeInfo	  off
 	  GenerateWebview	  off
 	  GenerateCodeMetricsReport off
 	  GenerateCodeReplacementReport	off
-	  GenerateMissedCodeReplacementReport off
-	  RTWCompilerOptimization "off"
+	  RTWCompilerOptimization "Off"
 	  RTWCustomCompilerOptimizations ""
 	  CheckMdlBeforeBuild	  "Off"
+	  CustomRebuildMode	  "OnUpdate"
+	  DataInitializer	  ""
 	  SharedConstantsCachingThreshold 1024
 	  Array {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
 	      $ObjectID		      16
-	      Version		      "1.15.1"
+	      Version		      "1.14.3"
 	      Array {
 		Type			"Cell"
 		Dimension		9
@@ -689,7 +729,7 @@ Model {
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
 	      $ObjectID		      17
-	      Version		      "1.15.1"
+	      Version		      "1.14.3"
 	      Array {
 		Type			"Cell"
 		Dimension		10
@@ -716,7 +756,6 @@ Model {
 	      ERTMultiwordLength      256
 	      MultiwordLength	      2048
 	      GenerateFullHeader      on
-	      InferredTypesCompatibility off
 	      GenerateSampleERTMain   off
 	      GenerateTestInterfaces  off
 	      ModelReferenceCompliant on
@@ -742,6 +781,7 @@ Model {
 	      SupportContinuousTime   on
 	      SupportNonInlinedSFcns  on
 	      SupportVariableSizeSignals off
+	      EnableShiftOperators    on
 	      ParenthesesLevel	      "Nominal"
 	      CastingMode	      "Nominal"
 	      MATLABClassNameForMDSCustomization "Simulink.SoftwareTarget.GRTCustomization"
@@ -750,7 +790,6 @@ Model {
 	      AutosarCompliant	      off
 	      GRTInterface	      on
 	      GenerateAllocFcn	      off
-	      UseToolchainInfoCompliant	on
 	      GenerateSharedConstants on
 	      UseMalloc		      off
 	      ExtMode		      off
@@ -772,7 +811,7 @@ Model {
 	}
 	SlCovCC.ConfigComp {
 	  $ObjectID		  18
-	  Version		  "1.15.1"
+	  Version		  "1.14.3"
 	  Description		  "Simulink Coverage Configuration Component"
 	  Name			  "Simulink Coverage"
 	  RecordCoverage	  off
@@ -873,9 +912,11 @@ Model {
   BlockParameterDefaults {
     Block {
       BlockType		      BusCreator
+      Inputs		      "4"
       DisplayOption	      "none"
       OutDataTypeStr	      "Inherit: auto"
       NonVirtualBus	      off
+      InheritFromInputs	      on
     }
     Block {
       BlockType		      BusSelector
@@ -914,7 +955,6 @@ Model {
       PropagateVarSize	      "Only when enabling"
       ShowOutputPort	      off
       ZeroCross		      on
-      DisallowConstTsAndPrmTs off
       PortDimensions	      "1"
       SampleTime	      "-1"
       OutMin		      "[]"
@@ -989,9 +1029,6 @@ Model {
       LimitOutput	      off
       UpperSaturationLimit    "inf"
       LowerSaturationLimit    "-inf"
-      WrapState		      off
-      WrappedStateUpperValue  "pi"
-      WrappedStateLowerValue  "-pi"
       ShowSaturationPort      off
       ShowStatePort	      off
       AbsoluteTolerance	      "auto"
@@ -1166,9 +1203,9 @@ Model {
       Opaque		      off
       MaskHideContents	      off
       SFBlockType	      "NONE"
+      Variant		      off
       GeneratePreprocessorConditionals off
       ContentPreviewEnabled   off
-      IsWebBlock	      off
     }
     Block {
       BlockType		      Sum
@@ -1251,7 +1288,6 @@ Model {
       Position		      [305, 40, 450, 110]
       ZOrder		      -3
       RequestExecContextInheritance off
-      Variant		      off
       System {
 	Name			"car_model"
 	Location		[-8, -8, 1928, 1168]
@@ -1286,7 +1322,6 @@ Model {
 	  ShowName		  off
 	  Inputs		  "3"
 	  DisplayOption		  "bar"
-	  InheritFromInputs	  on
 	}
 	Block {
 	  BlockType		  BusSelector
@@ -1354,7 +1389,6 @@ Model {
 	  AncestorBlock		  "capsim_lib/Chassis/chassis_model_template"
 	  LibraryVersion	  "*"
 	  RequestExecContextInheritance	off
-	  Variant		  off
 	  Port {
 	    PortNumber		    1
 	    Name		    "chassis"
@@ -1402,7 +1436,6 @@ Model {
 	      Position		      [295, 282, 510, 393]
 	      ZOrder		      -3
 	      RequestExecContextInheritance off
-	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
 		$ObjectID		20
@@ -1589,7 +1622,6 @@ Model {
 		  ShowName		  off
 		  Inputs		  "2"
 		  DisplayOption		  "bar"
-		  InheritFromInputs	  on
 		}
 		Block {
 		  BlockType		  BusCreator
@@ -1601,7 +1633,6 @@ Model {
 		  ShowName		  off
 		  Inputs		  "1"
 		  DisplayOption		  "bar"
-		  InheritFromInputs	  on
 		}
 		Block {
 		  BlockType		  BusSelector
@@ -1769,7 +1800,6 @@ Model {
 		  ForegroundColor	  "red"
 		  NamePlacement		  "alternate"
 		  RequestExecContextInheritance	off
-		  Variant		  off
 		  System {
 		    Name		    "Magic Formula"
 		    Location		    [17, 94, 647, 437]
@@ -1952,7 +1982,7 @@ Model {
 		    Annotation {
 		    SID			    "10:32"
 		    Name		    "Note: The SAE definition of the slip ratio kappa is used."
-		    Position		    [187, 140, 432, 155]
+		    Position		    [187, 140, 450, 155]
 		    InternalMargins	    [0, 0, 0, 0]
 		    FixedHeight		    off
 		    FixedWidth		    off
@@ -2426,7 +2456,7 @@ Model {
 		Annotation {
 		  SID			  "10:44"
 		  Name			  "\"feedback\" from\nthe drive shafts"
-		  Position		  [57, 386, 129, 414]
+		  Position		  [57, 386, 133, 414]
 		  InternalMargins	  [0, 0, 0, 0]
 		  FixedHeight		  off
 		  FixedWidth		  off
@@ -2435,7 +2465,7 @@ Model {
 		Annotation {
 		  SID			  "10:45"
 		  Name			  "\"feedback\" to\nthe final drive"
-		  Position		  [816, 404, 877, 432]
+		  Position		  [816, 404, 883, 432]
 		  InternalMargins	  [0, 0, 0, 0]
 		  FixedHeight		  off
 		  FixedWidth		  off
@@ -2451,7 +2481,6 @@ Model {
 	      Position		      [295, 61, 510, 159]
 	      ZOrder		      -4
 	      RequestExecContextInheritance off
-	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
 		$ObjectID		34
@@ -2508,7 +2537,6 @@ Model {
 		  ShowName		  off
 		  Inputs		  "1"
 		  DisplayOption		  "bar"
-		  InheritFromInputs	  on
 		}
 		Block {
 		  BlockType		  BusSelector
@@ -2692,7 +2720,6 @@ Model {
 	  AncestorBlock		  "capsim_lib/MechConverter/mechconverter_simple1_std"
 	  LibraryVersion	  "*"
 	  RequestExecContextInheritance	off
-	  Variant		  off
 	  Object {
 	    $PropName		    "MaskObject"
 	    $ObjectID		    36
@@ -2778,7 +2805,6 @@ Model {
 	      ShowName		      off
 	      Inputs		      "2"
 	      DisplayOption	      "bar"
-	      InheritFromInputs	      on
 	    }
 	    Block {
 	      BlockType		      BusCreator
@@ -2790,7 +2816,6 @@ Model {
 	      ShowName		      off
 	      Inputs		      "2"
 	      DisplayOption	      "bar"
-	      InheritFromInputs	      on
 	    }
 	    Block {
 	      BlockType		      BusSelector
@@ -3163,7 +3188,7 @@ Model {
 	    Annotation {
 	      SID		      "11:19"
 	      Name		      "\"feedback\" from\nthe gearbox"
-	      Position		      [56, 319, 128, 347]
+	      Position		      [56, 319, 132, 347]
 	      InternalMargins	      [0, 0, 0, 0]
 	      FixedHeight	      off
 	      FixedWidth	      off
@@ -3172,7 +3197,7 @@ Model {
 	    Annotation {
 	      SID		      "11:20"
 	      Name		      "\"feedback\" to\nthe flywheel"
-	      Position		      [721, 324, 781, 352]
+	      Position		      [721, 324, 785, 352]
 	      InternalMargins	      [0, 0, 0, 0]
 	      FixedHeight	      off
 	      FixedWidth	      off
@@ -3191,7 +3216,6 @@ Model {
 	  AncestorBlock		  "capsim_lib/Controller/controller_template"
 	  LibraryVersion	  "*"
 	  RequestExecContextInheritance	off
-	  Variant		  off
 	  System {
 	    Name		    "controller"
 	    Location		    [-8, -8, 1928, 1168]
@@ -3252,7 +3276,6 @@ Model {
 	      ShowName		      off
 	      Inputs		      "3"
 	      DisplayOption	      "bar"
-	      InheritFromInputs	      on
 	    }
 	    Block {
 	      BlockType		      BusCreator
@@ -3264,7 +3287,6 @@ Model {
 	      ShowName		      off
 	      Inputs		      "1"
 	      DisplayOption	      "bar"
-	      InheritFromInputs	      on
 	      Port {
 		PortNumber		1
 		Name			"chassis"
@@ -3282,7 +3304,6 @@ Model {
 	      ShowName		      off
 	      Inputs		      "1"
 	      DisplayOption	      "bar"
-	      InheritFromInputs	      on
 	      Port {
 		PortNumber		1
 		Name			"ice"
@@ -3300,7 +3321,6 @@ Model {
 	      ShowName		      off
 	      Inputs		      "1"
 	      DisplayOption	      "bar"
-	      InheritFromInputs	      on
 	    }
 	    Block {
 	      BlockType		      BusCreator
@@ -3312,7 +3332,6 @@ Model {
 	      ShowName		      off
 	      Inputs		      "1"
 	      DisplayOption	      "bar"
-	      InheritFromInputs	      on
 	      Port {
 		PortNumber		1
 		Name			"gearbox"
@@ -3486,7 +3505,6 @@ Model {
 	      Position		      [310, 70, 425, 150]
 	      ZOrder		      -18
 	      RequestExecContextInheritance off
-	      Variant		      off
 	      System {
 		Name			"Reference states"
 		Location		[123, 311, 1266, 787]
@@ -3821,7 +3839,6 @@ Model {
 	      Position		      [440, 244, 695, 316]
 	      ZOrder		      -24
 	      RequestExecContextInheritance off
-	      Variant		      off
 	      Port {
 		PortNumber		1
 		Name			"torque level"
@@ -3842,7 +3859,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"125"
+		ZoomFactor		"134"
 		Block {
 		  BlockType		  Inport
 		  Name			  "x_ref"
@@ -3897,7 +3914,6 @@ Model {
 		  SID			  "12:44"
 		  Position		  [790, 157, 820, 193]
 		  ZOrder		  -6
-		  CurrentSetting	  "0"
 		}
 		Block {
 		  BlockType		  Mux
@@ -4095,7 +4111,7 @@ Model {
 		  SID			  "12:50"
 		  Name			  "Construct an observer for the vehicle using the engine speed sensor. \nThen use the given reference stat"
 		  "es (x_ref) and design a state feedback controller to damp the driveline oscillations. "
-		  Position		  [543, 44, 1575, 92]
+		  Position		  [543, 44, 1566, 94]
 		  InternalMargins	  [0, 0, 0, 0]
 		  FixedHeight		  off
 		  FixedWidth		  off
@@ -4106,7 +4122,7 @@ Model {
 		Annotation {
 		  SID			  "12:51"
 		  Name			  "Connect your observed states \nhear to plot them in Figure 3 "
-		  Position		  [258, 454, 531, 502]
+		  Position		  [258, 454, 529, 504]
 		  InternalMargins	  [0, 0, 0, 0]
 		  FixedHeight		  off
 		  FixedWidth		  off
@@ -4431,7 +4447,6 @@ Model {
 	  AncestorBlock		  "capsim_lib/MechConverter/mechconverter_simple1_std"
 	  LibraryVersion	  "*"
 	  RequestExecContextInheritance	off
-	  Variant		  off
 	  Object {
 	    $PropName		    "MaskObject"
 	    $ObjectID		    41
@@ -4517,7 +4532,6 @@ Model {
 	      ShowName		      off
 	      Inputs		      "2"
 	      DisplayOption	      "bar"
-	      InheritFromInputs	      on
 	    }
 	    Block {
 	      BlockType		      BusCreator
@@ -4529,7 +4543,6 @@ Model {
 	      ShowName		      off
 	      Inputs		      "2"
 	      DisplayOption	      "bar"
-	      InheritFromInputs	      on
 	    }
 	    Block {
 	      BlockType		      BusSelector
@@ -4902,7 +4915,7 @@ Model {
 	    Annotation {
 	      SID		      "13:19"
 	      Name		      "\"feedback\" from\nthe gearbox"
-	      Position		      [56, 319, 128, 347]
+	      Position		      [56, 319, 132, 347]
 	      InternalMargins	      [0, 0, 0, 0]
 	      FixedHeight	      off
 	      FixedWidth	      off
@@ -4911,7 +4924,7 @@ Model {
 	    Annotation {
 	      SID		      "13:20"
 	      Name		      "\"feedback\" to\nthe flywheel"
-	      Position		      [721, 324, 781, 352]
+	      Position		      [721, 324, 785, 352]
 	      InternalMargins	      [0, 0, 0, 0]
 	      FixedHeight	      off
 	      FixedWidth	      off
@@ -4930,7 +4943,6 @@ Model {
 	  AncestorBlock		  "capsim_lib/Gearbox/gearbox_template"
 	  LibraryVersion	  "*"
 	  RequestExecContextInheritance	off
-	  Variant		  off
 	  System {
 	    Name		    "final drive model"
 	    Location		    [306, 399, 1302, 1042]
@@ -4972,7 +4984,6 @@ Model {
 	      Position		      [270, 79, 485, 181]
 	      ZOrder		      -3
 	      RequestExecContextInheritance off
-	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
 		$ObjectID		46
@@ -5053,7 +5064,6 @@ Model {
 		  ShowName		  off
 		  Inputs		  "2"
 		  DisplayOption		  "bar"
-		  InheritFromInputs	  on
 		}
 		Block {
 		  BlockType		  BusCreator
@@ -5065,7 +5075,6 @@ Model {
 		  ShowName		  off
 		  Inputs		  "2"
 		  DisplayOption		  "bar"
-		  InheritFromInputs	  on
 		}
 		Block {
 		  BlockType		  BusSelector
@@ -5496,7 +5505,7 @@ Model {
 		Annotation {
 		  SID			  "14:23"
 		  Name			  "\"feedback\" to\nthe propeller shaft"
-		  Position		  [681, 259, 762, 287]
+		  Position		  [681, 259, 768, 287]
 		  InternalMargins	  [0, 0, 0, 0]
 		  FixedHeight		  off
 		  FixedWidth		  off
@@ -5505,7 +5514,7 @@ Model {
 		Annotation {
 		  SID			  "14:24"
 		  Name			  "\"feedback\" from\nthe drive shafts"
-		  Position		  [62, 261, 134, 289]
+		  Position		  [62, 261, 138, 289]
 		  InternalMargins	  [0, 0, 0, 0]
 		  FixedHeight		  off
 		  FixedWidth		  off
@@ -5572,7 +5581,6 @@ Model {
 	  AncestorBlock		  "capsim_lib/Inertia/inertia_simple1_std"
 	  LibraryVersion	  "*"
 	  RequestExecContextInheritance	off
-	  Variant		  off
 	  Object {
 	    $PropName		    "MaskObject"
 	    $ObjectID		    51
@@ -5661,7 +5669,6 @@ Model {
 	      ShowName		      off
 	      Inputs		      "2"
 	      DisplayOption	      "bar"
-	      InheritFromInputs	      on
 	      Port {
 		PortNumber		1
 		Name			"inertia\n"
@@ -5679,7 +5686,6 @@ Model {
 	      ShowName		      off
 	      Inputs		      "2"
 	      DisplayOption	      "bar"
-	      InheritFromInputs	      on
 	    }
 	    Block {
 	      BlockType		      BusSelector
@@ -6077,7 +6083,7 @@ Model {
 	    Annotation {
 	      SID		      "15:20"
 	      Name		      "\"feedback\" to\nthe final drive"
-	      Position		      [711, 334, 772, 362]
+	      Position		      [711, 334, 778, 362]
 	      InternalMargins	      [0, 0, 0, 0]
 	      FixedHeight	      off
 	      FixedWidth	      off
@@ -6086,7 +6092,7 @@ Model {
 	    Annotation {
 	      SID		      "15:21"
 	      Name		      "\"feedback\" from\nthe drive shafts"
-	      Position		      [56, 324, 128, 352]
+	      Position		      [56, 324, 132, 352]
 	      InternalMargins	      [0, 0, 0, 0]
 	      FixedHeight	      off
 	      FixedWidth	      off
@@ -6105,7 +6111,6 @@ Model {
 	  AncestorBlock		  "capsim_lib/Inertia/inertia_simple1_std"
 	  LibraryVersion	  "*"
 	  RequestExecContextInheritance	off
-	  Variant		  off
 	  Object {
 	    $PropName		    "MaskObject"
 	    $ObjectID		    56
@@ -6194,7 +6199,6 @@ Model {
 	      ShowName		      off
 	      Inputs		      "2"
 	      DisplayOption	      "bar"
-	      InheritFromInputs	      on
 	      Port {
 		PortNumber		1
 		Name			"inertia\n"
@@ -6212,7 +6216,6 @@ Model {
 	      ShowName		      off
 	      Inputs		      "2"
 	      DisplayOption	      "bar"
-	      InheritFromInputs	      on
 	    }
 	    Block {
 	      BlockType		      BusSelector
@@ -6612,7 +6615,7 @@ Model {
 	    Annotation {
 	      SID		      "16:20"
 	      Name		      "\"feedback\" to\nthe engine"
-	      Position		      [716, 324, 776, 352]
+	      Position		      [716, 324, 780, 352]
 	      InternalMargins	      [0, 0, 0, 0]
 	      FixedHeight	      off
 	      FixedWidth	      off
@@ -6621,7 +6624,7 @@ Model {
 	    Annotation {
 	      SID		      "16:21"
 	      Name		      "\"feedback\" from\nthe clutch"
-	      Position		      [51, 324, 123, 352]
+	      Position		      [51, 324, 127, 352]
 	      InternalMargins	      [0, 0, 0, 0]
 	      FixedHeight	      off
 	      FixedWidth	      off
@@ -6640,7 +6643,6 @@ Model {
 	  AncestorBlock		  "capsim_lib/Inertia/inertia_simple1_std"
 	  LibraryVersion	  "*"
 	  RequestExecContextInheritance	off
-	  Variant		  off
 	  Object {
 	    $PropName		    "MaskObject"
 	    $ObjectID		    61
@@ -6729,7 +6731,6 @@ Model {
 	      ShowName		      off
 	      Inputs		      "2"
 	      DisplayOption	      "bar"
-	      InheritFromInputs	      on
 	      Port {
 		PortNumber		1
 		Name			"inertia\n"
@@ -6747,7 +6748,6 @@ Model {
 	      ShowName		      off
 	      Inputs		      "2"
 	      DisplayOption	      "bar"
-	      InheritFromInputs	      on
 	    }
 	    Block {
 	      BlockType		      BusSelector
@@ -7145,7 +7145,7 @@ Model {
 	    Annotation {
 	      SID		      "17:20"
 	      Name		      "\"feedback\" from\nthe propeller shaft"
-	      Position		      [56, 324, 137, 352]
+	      Position		      [56, 324, 143, 352]
 	      InternalMargins	      [0, 0, 0, 0]
 	      FixedHeight	      off
 	      FixedWidth	      off
@@ -7154,7 +7154,7 @@ Model {
 	    Annotation {
 	      SID		      "17:21"
 	      Name		      "\"feedback\" to\nthe gearbox"
-	      Position		      [711, 334, 771, 362]
+	      Position		      [711, 334, 775, 362]
 	      InternalMargins	      [0, 0, 0, 0]
 	      FixedHeight	      off
 	      FixedWidth	      off
@@ -7173,7 +7173,6 @@ Model {
 	  AncestorBlock		  "capsim_lib/Gearbox/gearbox_template"
 	  LibraryVersion	  "*"
 	  RequestExecContextInheritance	off
-	  Variant		  off
 	  Port {
 	    PortNumber		    1
 	    Name		    "gearbox"
@@ -7230,7 +7229,6 @@ Model {
 	      Position		      [305, 319, 520, 421]
 	      ZOrder		      -4
 	      RequestExecContextInheritance off
-	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
 		$ObjectID		66
@@ -7313,7 +7311,6 @@ Model {
 		  ShowName		  off
 		  Inputs		  "2"
 		  DisplayOption		  "bar"
-		  InheritFromInputs	  on
 		}
 		Block {
 		  BlockType		  BusCreator
@@ -7325,7 +7322,6 @@ Model {
 		  ShowName		  off
 		  Inputs		  "2"
 		  DisplayOption		  "bar"
-		  InheritFromInputs	  on
 		}
 		Block {
 		  BlockType		  BusSelector
@@ -7779,7 +7775,7 @@ Model {
 		Annotation {
 		  SID			  "18:25"
 		  Name			  "\"feedback\" from\nthe propeller shaft"
-		  Position		  [62, 351, 143, 379]
+		  Position		  [62, 351, 149, 379]
 		  InternalMargins	  [0, 0, 0, 0]
 		  FixedHeight		  off
 		  FixedWidth		  off
@@ -7788,7 +7784,7 @@ Model {
 		Annotation {
 		  SID			  "18:26"
 		  Name			  "\"feedback\" to\nthe clutch"
-		  Position		  [681, 349, 741, 377]
+		  Position		  [681, 349, 745, 377]
 		  InternalMargins	  [0, 0, 0, 0]
 		  FixedHeight		  off
 		  FixedWidth		  off
@@ -7804,7 +7800,6 @@ Model {
 	      Position		      [300, 116, 515, 214]
 	      ZOrder		      -5
 	      RequestExecContextInheritance off
-	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
 		$ObjectID		70
@@ -7878,7 +7873,6 @@ Model {
 		  ShowName		  off
 		  Inputs		  "2"
 		  DisplayOption		  "bar"
-		  InheritFromInputs	  on
 		}
 		Block {
 		  BlockType		  BusSelector
@@ -8101,7 +8095,6 @@ Model {
 	  ZOrder		  -16
 	  ForegroundColor	  "red"
 	  RequestExecContextInheritance	off
-	  Variant		  off
 	  Port {
 	    PortNumber		    1
 	    Name		    "ice"
@@ -8148,7 +8141,6 @@ Model {
 	      Position		      [235, 235, 450, 335]
 	      ZOrder		      -3
 	      RequestExecContextInheritance off
-	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
 		$ObjectID		74
@@ -8236,7 +8228,6 @@ Model {
 		  ShowName		  off
 		  Inputs		  "2"
 		  DisplayOption		  "bar"
-		  InheritFromInputs	  on
 		}
 		Block {
 		  BlockType		  BusCreator
@@ -8248,7 +8239,6 @@ Model {
 		  ShowName		  off
 		  Inputs		  "2"
 		  DisplayOption		  "bar"
-		  InheritFromInputs	  on
 		}
 		Block {
 		  BlockType		  BusSelector
@@ -8593,7 +8583,7 @@ Model {
 		Annotation {
 		  SID			  "42"
 		  Name			  "\"feedback\" from\nthe gearbox"
-		  Position		  [49, 210, 121, 238]
+		  Position		  [49, 210, 125, 238]
 		  InternalMargins	  [0, 0, 0, 0]
 		  FixedHeight		  off
 		  FixedWidth		  off
@@ -8609,7 +8599,6 @@ Model {
 	      Position		      [235, 36, 450, 134]
 	      ZOrder		      -4
 	      RequestExecContextInheritance off
-	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
 		$ObjectID		80
@@ -8697,7 +8686,6 @@ Model {
 		  ShowName		  off
 		  Inputs		  "1"
 		  DisplayOption		  "bar"
-		  InheritFromInputs	  on
 		}
 		Block {
 		  BlockType		  BusSelector
@@ -8739,7 +8727,7 @@ Model {
 		  Position		  [310, 204, 395, 226]
 		  ZOrder		  -6
 		  ShowName		  off
-		  LibraryVersion	  "1.358"
+		  LibraryVersion	  "1.354"
 		  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 		  SourceType		  "Compare To Constant"
 		  ContentPreviewEnabled	  off
@@ -8756,7 +8744,7 @@ Model {
 		  Position		  [310, 322, 395, 348]
 		  ZOrder		  -7
 		  ShowName		  off
-		  LibraryVersion	  "1.358"
+		  LibraryVersion	  "1.354"
 		  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 		  SourceType		  "Compare To Constant"
 		  ContentPreviewEnabled	  off
@@ -8789,7 +8777,6 @@ Model {
 		  Position		  [360, 364, 450, 426]
 		  ZOrder		  -10
 		  RequestExecContextInheritance	off
-		  Variant		  off
 		  System {
 		    Name		    "Idle controller"
 		    Location		    [696, 520, 1424, 1054]
@@ -9019,7 +9006,6 @@ Model {
 		  Position		  [360, 237, 450, 263]
 		  ZOrder		  -11
 		  RequestExecContextInheritance	off
-		  Variant		  off
 		  System {
 		    Name		    "Max speed controller"
 		    Location		    [696, 520, 1424, 1054]
@@ -9364,7 +9350,6 @@ Model {
 	  AncestorBlock		  "capsim_lib/MechConverter/mechconverter_simple1_std"
 	  LibraryVersion	  "*"
 	  RequestExecContextInheritance	off
-	  Variant		  off
 	  Object {
 	    $PropName		    "MaskObject"
 	    $ObjectID		    86
@@ -9450,7 +9435,6 @@ Model {
 	      ShowName		      off
 	      Inputs		      "2"
 	      DisplayOption	      "bar"
-	      InheritFromInputs	      on
 	    }
 	    Block {
 	      BlockType		      BusCreator
@@ -9462,7 +9446,6 @@ Model {
 	      ShowName		      off
 	      Inputs		      "2"
 	      DisplayOption	      "bar"
-	      InheritFromInputs	      on
 	    }
 	    Block {
 	      BlockType		      BusSelector
@@ -9835,7 +9818,7 @@ Model {
 	    Annotation {
 	      SID		      "77:19"
 	      Name		      "\"feedback\" to\nthe flywheel"
-	      Position		      [721, 324, 781, 352]
+	      Position		      [721, 324, 785, 352]
 	      InternalMargins	      [0, 0, 0, 0]
 	      FixedHeight	      off
 	      FixedWidth	      off
@@ -9844,7 +9827,7 @@ Model {
 	    Annotation {
 	      SID		      "77:20"
 	      Name		      "\"feedback\" from\nthe gearbox"
-	      Position		      [56, 319, 128, 347]
+	      Position		      [56, 319, 132, 347]
 	      InternalMargins	      [0, 0, 0, 0]
 	      FixedHeight	      off
 	      FixedWidth	      off
@@ -10130,7 +10113,6 @@ Model {
       AncestorBlock	      "capsim_lib/Environment/environment_model_jofr1"
       LibraryVersion	      "*"
       RequestExecContextInheritance off
-      Variant		      off
       Object {
 	$PropName		"MaskObject"
 	$ObjectID		91
@@ -10195,7 +10177,7 @@ Model {
 	  Position		  [335, 295, 365, 325]
 	  ZOrder		  -1
 	  ShowName		  off
-	  LibraryVersion	  "1.358"
+	  LibraryVersion	  "1.354"
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
 	  ContentPreviewEnabled	  off
@@ -10212,7 +10194,7 @@ Model {
 	  Position		  [335, 345, 365, 375]
 	  ZOrder		  -2
 	  ShowName		  off
-	  LibraryVersion	  "1.358"
+	  LibraryVersion	  "1.354"
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
 	  ContentPreviewEnabled	  off
@@ -10440,7 +10422,6 @@ Model {
       AncestorBlock	      "capsim_lib/Driver/driver_model_template"
       LibraryVersion	      "*"
       RequestExecContextInheritance off
-      Variant		      off
       Object {
 	$PropName		"MaskObject"
 	$ObjectID		96
@@ -10481,7 +10462,6 @@ Model {
 	  ShowName		  off
 	  Inputs		  "1"
 	  DisplayOption		  "bar"
-	  InheritFromInputs	  on
 	}
 	Block {
 	  BlockType		  BusSelector

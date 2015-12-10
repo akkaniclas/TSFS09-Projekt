@@ -59,7 +59,7 @@ plot(tout,a,'LineWidth',2);
 title('Vehicle');
 ylabel('Acceleration [m/s^2]');
 %axis([StartTime inf -inf inf]);
-
+%saveas(h, 'figure1a', 'png')
 % create figure 2
 h = figure(2); % clf;
 %scrsz = get(0,'ScreenSize');
@@ -120,3 +120,4 @@ title('Drive shafts');
 xlabel('Time [s]');
 ylabel('Torsion [rad]');
 %axis([StartTime inf -inf inf]);
+%saveas(h, 'figure2a', 'png')

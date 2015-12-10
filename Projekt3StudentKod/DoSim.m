@@ -140,7 +140,7 @@ DoPlot;
 
 
 
-figure(3)
+h = figure(3)
 subplot(221); grid on; hold on;
 plot(tout,thDiff_d,'b--','LineWidth',2);
 plot(tout,obsstates(:,1),'r-')
@@ -169,9 +169,10 @@ title('Torque')
 xlabel('Time [s]')
 ylabel('Torque [Nm]')
 legend('Measured','Observed')
+%saveas(h, 'uppg3', 'png')
 
 % Plot Torque demand from driver and controller
-figure(4)
+h = figure(4)
 subplot(121); hold on; grid on;
 plot(tout,pedal,'blue-','LineWidth',2);
 plot(tout,pedal_driver,'red-','LineWidth',2);
@@ -188,3 +189,4 @@ title('Vehicle');
 ylabel('Acceleration [m/s^2]');
 %axis([StartTime inf -inf inf]);
 
+%saveas(h, 'figure4b', 'png')
